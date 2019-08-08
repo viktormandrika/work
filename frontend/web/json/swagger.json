@@ -13,20 +13,20 @@
    "description": "Операции с вакансиями"
   },
   {
-   "name": "Группы123456",
-   "description": "Операции с группами"
+   "name": "Категории",
+   "description": "Операции с категориями"
   },
   {
-   "name": "Каналы",
-   "description": "Операции с каналами"
+   "name": "Компании",
+   "description": "Операции с компаниями"
   },
   {
-   "name": "Аватарки",
-   "description": "Операции с аватарками"
+   "name": "Образование",
+   "description": "Операции с образованием"
   },
   {
-   "name": "Пользователи",
-   "description": "Операции с пользователями"
+   "name": "Работодатели",
+   "description": "Операции с работодателями"
   },
   {
    "name": "Сообщения",
@@ -59,6 +59,20 @@
   "application/xml"
  ],
  "paths": {
+  "/request/vacancy": {
+   "get": {
+    "summary": "Просмотр всех вакансий",
+    "description": "Для того что-бы посмотреть вакансию, нужно отпрвавить <br>GET</b> запрос на <b>/request/vacancy</b>.",
+    "tags": [
+     "Вакансии"
+    ],
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    }
+   }
+  },
   "/request/vacancy/{vacancy_id}": {
    "get": {
     "summary": "Просмотр одной вакансии",
@@ -68,7 +82,7 @@
     ],
     "parameters": [
      {
-      "name": "id",
+      "name": "vacancy_id",
       "in": "path",
       "description": "Vacancy ID",
       "schema": {
@@ -363,34 +377,35 @@
     }
    }
   },
-  "/user/search_request={request}&page={page}": {
+  "/request/category": {
    "get": {
-    "summary": "Поиск пользователей",
-    "description": "Для того, чтобы искать пользователей, необходимо отправить <b>GET</b> запрос на <b>/v1/user/search_request={request}&page={page}</b>.</br>Поиск происходит по email и username",
+    "summary": "Просмотр всех категорий",
+    "description": "Для того, чтобы посмотреть все категории, необходимо отправить <b>GET</b> запрос на <b>/request/category</b>.",
     "tags": [
-     "Пользователи"
+     "Категории"
     ],
-    "security": [
-     {
-      "Bearer": []
+    "responses": {
+     "200": {
+      "description": "OK"
      }
+    }
+   }
+  },
+  "/request/category/{category_id}": {
+   "get": {
+    "summary": "Просмотр одной категории",
+    "description": "Для того, чтобы посмотреть конкретную категорию, необходимо отправить <b>GET</b> запрос на <b>/request/category/{category_id}</b>.",
+    "tags": [
+     "Категории"
     ],
     "parameters": [
      {
-      "name": "request",
+      "name": "category_id",
       "in": "path",
-      "description": "Строка запроса на поиск пользователей",
-      "schema": {
-       "type": "string"
-      }
-     },
-     {
-      "name": "page",
-      "in": "path",
-      "description": "Количество ответов",
+      "description": "Category ID",
       "schema": {
        "type": "integer",
-       "min": 1
+       "format": "int64"
       }
      }
     ],
@@ -401,26 +416,179 @@
     }
    }
   },
-  "/user/profile/{user_id}": {
-   "put": {
-    "summary": "Редактирование профиля",
-    "description": "Для того, чтобы редактировать пользователя, необходимо отправить <b>PUT</b> запрос на <b>/v1/user/profile/{user_id}</b>",
+  "/request/company/": {
+   "get": {
+    "summary": "Просмотр всех компаний",
+    "description": "Для того, чтобы посмотреть все компании, необходимо отправить <b>GET</b> запрос на <b>/request/company</b>.",
     "tags": [
-     "Пользователи"
+     "Компании"
     ],
-    "security": [
-     {
-      "Bearer": []
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Company"
+        }
+       }
+      }
      }
+    }
+   }
+  },
+  "/request/company/{company_id}": {
+   "get": {
+    "summary": "Просмотр одной компании",
+    "description": "Для того, чтобы посмотреть конкретную компанию, необходимо отправить <b>GET</b> запрос на <b>/request/company/{company_id}</b>.",
+    "tags": [
+     "Компании"
     ],
     "parameters": [
      {
-      "name": "user_id",
+      "name": "company_id",
       "in": "path",
+      "description": "Vacancy ID",
       "schema": {
-       "type": "string"
-      },
-      "description": "User ID"
+       "type": "integer",
+       "format": "int64"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Company"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/request/company/my-index": {
+   "get": {
+    "summary": "Просмотр всех компаний текущего пользователя",
+    "description": "Для того что-бы посмотреть вакансию, нужно отпрвавить <br>GET</b> запрос на <b>/request/vacancy/my-index</b>.",
+    "tags": [
+     "Компании"
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Company"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/request/company/create": {
+   "post": {
+    "summary": "Добавление компании",
+    "description": "Для того, чтобы добавить новую компанию, необходимо отправить <b>POST</b> запрос на <b>/request/company/create</b>",
+    "tags": [
+     "Компании"
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "user_id": {
+          "type": "integer",
+          "example": ""
+         },
+         "name": {
+          "type": "string",
+          "example": ""
+         },
+         "image": {
+          "type": "string",
+          "example": ""
+         },
+         "website": {
+          "type": "string",
+          "example": ""
+         },
+         "activity_field": {
+          "type": "string",
+          "example": ""
+         },
+         "vk": {
+          "type": "string",
+          "example": ""
+         },
+         "facebook": {
+          "type": "string",
+          "example": ""
+         },
+         "instagram": {
+          "type": "string",
+          "example": ""
+         },
+         "skype": {
+          "type": "string",
+          "example": ""
+         },
+         "description": {
+          "type": "string",
+          "example": ""
+         },
+         "contact_person": {
+          "type": "string",
+          "example": ""
+         },
+         "status": {
+          "type": "integer",
+          "example": ""
+         },
+         "phone": {
+          "type": "string",
+          "example": ""
+         }
+        }
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Company_create"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/request/company/{companyID}": {
+   "put": {
+    "summary": "Редактирование компании",
+    "description": "Для того чтобы редактировать компанию, необходимо отправить <b>PUT</b> запрос на <b>/request/company/update</b>",
+    "tags": [
+     "Компании"
+    ],
+    "parameters": [
+     {
+      "name": "companyID",
+      "in": "path",
+      "description": "Company_ID",
+      "schema": {
+       "type": "integer"
+      }
      }
     ],
     "requestBody": {
@@ -429,47 +597,64 @@
        "schema": {
         "type": "object",
         "properties": {
-         "username": {
-          "type": "string"
-         },
-         "avatar_id": {
+         "user_id": {
           "type": "integer",
-          "format": "int64"
+          "example": ""
+         },
+         "name": {
+          "type": "string",
+          "example": ""
+         },
+         "image": {
+          "type": "object",
+          "properties": {
+           "changeImg": {
+            "type": "string",
+            "example": "false"
+           }
+          }
+         },
+         "website": {
+          "type": "string",
+          "example": ""
+         },
+         "activity_field": {
+          "type": "string",
+          "example": ""
+         },
+         "vk": {
+          "type": "string",
+          "example": ""
+         },
+         "facebook": {
+          "type": "string",
+          "example": ""
+         },
+         "instagram": {
+          "type": "string",
+          "example": ""
+         },
+         "skype": {
+          "type": "string",
+          "example": ""
+         },
+         "description": {
+          "type": "string",
+          "example": ""
+         },
+         "contact_person": {
+          "type": "string",
+          "example": ""
+         },
+         "status": {
+          "type": "integer",
+          "example": ""
+         },
+         "phone": {
+          "type": "string",
+          "example": ""
          }
         }
-       }
-      },
-      "application/xml": {
-       "schema": {
-        "type": "object",
-        "properties": {
-         "username": {
-          "type": "string"
-         },
-         "avatar_id": {
-          "type": "integer",
-          "format": "int64"
-         }
-        }
-       }
-      },
-      "application/x-www-form-urlencoded": {
-       "schema": {
-        "type": "object",
-        "properties": {
-         "username": {
-          "type": "string"
-         },
-         "avatar_id": {
-          "type": "integer",
-          "format": "int64"
-         }
-        }
-       }
-      },
-      "text/plain": {
-       "schema": {
-        "type": "string"
        }
       }
      }
@@ -480,7 +665,7 @@
       "content": {
        "application/json": {
         "schema": {
-         "$ref": "#/components/schemas/User"
+         "$ref": "#/components/schemas/Company_create"
         }
        }
       }
@@ -488,113 +673,87 @@
     }
    }
   },
-  "/group": {
-   "get": {
-    "summary": "Получение групп пользователя",
-    "description": "Для получения групп пользователя необходимо отправить <b>GET</b> запрос на <b>/v1/group</b>",
+  "/request/company/{companyDeletedID}": {
+   "delete": {
+    "summary": "Удаление компании",
+    "description": "Для того, чтобы удалить вакансию, необходимо отправить <b>DELETE</b> запрос на <b>/request/company</b>",
     "tags": [
-     "Группы"
+     "Компании"
     ],
-    "security": [
+    "parameters": [
      {
-      "Bearer": []
+      "name": "companyDeletedID",
+      "in": "path",
+      "description": "Company_ID",
+      "schema": {
+       "type": "integer",
+       "format": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK"
+     }
+    }
+   }
+  },
+  "/request/education": {
+   "get": {
+    "summary": "Получение списка образований",
+    "description": "Для получения списка образований необходимо отправить <b>GET</b> запрос на <b>/request/education</b>. Также существует необязательный параметр <b>expand</b>, в который можно передать параметр <b>resume</b> и получить резюме к которому привязан данный лист образования",
+    "tags": [
+     "Образование"
+    ],
+    "parameters": [
+     {
+      "name": "expand",
+      "in": "query",
+      "description": "Expand",
+      "schema": {
+       "type": "string",
+       "format": "string"
+      }
      }
     ],
     "responses": {
      "200": {
       "description": "OK",
-      "schema": {
-       "$ref": "#/components/schemas/Group"
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Education"
+        }
+       }
       }
      }
     }
-   },
-   "post": {
-    "summary": "Добавление группы",
-    "description": "Для того, чтобы добавить группу, необходимо отправить POST запрос на /v1/group",
-    "tags": [
-     "Группы"
-    ],
-    "security": [
-     {
-      "Bearer": []
-     }
-    ],
-    "parameters": [
-     {
-      "name": "title",
-      "in": "formData",
-      "description": "Название группы",
-      "required": true,
-      "schema": {
-       "type": "string"
-      }
-     },
-     {
-      "name": "slug",
-      "in": "formData",
-      "description": "URL группы",
-      "required": true,
-      "schema": {
-       "type": "string"
-      }
-     },
-     {
-      "name": "status",
-      "in": "formData",
-      "description": "Статус группы (активная / не активная)",
-      "required": true,
-      "schema": {
-       "type": "string",
-       "enum": [
-        "active",
-        "disable"
-       ],
-       "default": "active"
-      }
-     },
-     {
-      "name": "owner_id",
-      "in": "formData",
-      "description": "Идентификатор создателя группы",
-      "required": true,
-      "schema": {
-       "type": "integer"
-      }
-     },
-     {
-      "name": "user_ids",
-      "in": "formData",
-      "description": "Массив пользователей группы",
-      "schema": {
-       "type": "array",
-       "items": {
-        "type": "integer"
-       },
-       "minItems": 1
-      }
-     },
-     {
-      "name": "avatar"
-     }
-    ]
    }
   },
-  "/single-link": {
+  "/request/education/{education_id}": {
    "get": {
-    "summary": "Мета данные простой (одной) ссылки",
-    "description": "Получить мета данные (название сайта, описание, иконка) по ссылке",
+    "summary": "Получение одного бланка образования",
+    "description": "Для того, чтобы посмотреть конкретное образование, необходимо отправить <b>GET</b> запрос на <b>/request/education/{education_id}</b>. Также существует необязательный параметр <b>expand</b>, в который можно передать параметр <b>resume</b> и получить резюме к которому привязан данный лист образования",
     "tags": [
-     "Ссылки"
+     "Образование"
     ],
     "parameters": [
      {
+      "name": "education_id",
+      "in": "path",
+      "description": "Vacancy ID",
+      "schema": {
+       "type": "integer",
+       "format": "int64"
+      }
+     },
+     {
+      "name": "expand",
       "in": "query",
-      "name": "link",
-      "required": true,
+      "description": "Expand",
       "schema": {
        "type": "string",
-       "example": "https://laravel.com"
+       "format": "string"
       }
      }
     ],
@@ -604,36 +763,20 @@
       "content": {
        "application/json": {
         "schema": {
-         "$ref": "#/components/schemas/Link"
+         "$ref": "#/components/schemas/Education"
         }
        }
       }
      }
-    },
-    "security": [
-     {
-      "Bearer": []
-     }
-    ]
+    }
    }
   },
-  "/text-link": {
+  "/request/employer": {
    "get": {
-    "summary": "Мета данные всех ссылок в сообщении",
-    "description": "Получить мета данные (название сайта, описание, иконка) по всем ссылкам в сообщении",
+    "summary": "Просмотр всех работодателей",
+    "description": "Для того, чтобы посмотреть всех работодателей, необходимо отправить <b>GET</b> запрос на <b>/request/employer</b>.",
     "tags": [
-     "Ссылки"
-    ],
-    "parameters": [
-     {
-      "in": "query",
-      "name": "link",
-      "required": true,
-      "schema": {
-       "type": "string",
-       "example": "Laravel документация по ссылке https://laravel.com"
-      }
-     }
+     "Работодатели"
     ],
     "responses": {
      "200": {
@@ -641,17 +784,12 @@
       "content": {
        "application/json": {
         "schema": {
-         "$ref": "#/components/schemas/Link"
+         "$ref": "#/components/schemas/Employer"
         }
        }
       }
      }
-    },
-    "security": [
-     {
-      "Bearer": []
-     }
-    ]
+    }
    }
   }
  },
@@ -664,6 +802,197 @@
    }
   },
   "schemas": {
+   "Employer": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "integer",
+      "description": "ID работодателя"
+     },
+     "user_id": {
+      "type": "integer",
+      "description": "ID пользователя"
+     },
+     "first_name": {
+      "type": "string",
+      "description": "Имя"
+     },
+     "second_name": {
+      "type": "string",
+      "description": "Фамилия"
+     },
+     "birth_date": {
+      "type": "date",
+      "description": "Дата рождения"
+     },
+     "status": {
+      "type": "integer",
+      "description": "Статус 1 - активен, 0 - неактивен"
+     },
+     "created_at": {
+      "type": "integer",
+      "description": "Дата создания"
+     },
+     "updated_at": {
+      "type": "integer",
+      "description": "Дата редактирования"
+     },
+     "owner": {
+      "type": "integer",
+      "description": "ID создателя"
+     }
+    },
+    "example": {
+     "id": 9,
+     "user_id": 38,
+     "first_name": "Дмитрий",
+     "second_name": "Завадский",
+     "birth_date": "2017-01-16T00:00:00.000Z",
+     "status": 1,
+     "created_at": "17-01-2019",
+     "updated_at": 1560257714,
+     "owner": 1
+    }
+   },
+   "Education": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "integer",
+      "description": "ID бланка с образованием"
+     },
+     "resume_id": {
+      "type": "integer",
+      "description": "ID резюме с текущим образованием"
+     },
+     "name": {
+      "type": "string",
+      "description": "Название университета"
+     },
+     "faculty": {
+      "type": "string",
+      "description": "Название факультета"
+     },
+     "year_from": {
+      "type": "integer",
+      "description": "Дата начала обучения"
+     },
+     "year_to": {
+      "type": "integer",
+      "description": "Дата начала обучения"
+     },
+     "academic_degree": {
+      "type": "string",
+      "description": "Академическая степень"
+     },
+     "specialization": {
+      "type": "string",
+      "description": "Специализация"
+     },
+     "status": {
+      "type": "integer",
+      "description": "Статус 1 - активен, 0 - неактивен"
+     },
+     "created_at": {
+      "type": "integer",
+      "description": "Дата создания"
+     },
+     "updated_at": {
+      "type": "integer",
+      "description": "Дата редактирования"
+     },
+     "owner": {
+      "type": "integer",
+      "description": "ID создателя"
+     }
+    },
+    "example": {
+     "id": 9,
+     "resume_id": 38,
+     "name": "ДОННТУ",
+     "faculty": "ФКНТ",
+     "year_from": 2015,
+     "year_to": 2019,
+     "academic_degree": "Бакалавр",
+     "specialization": "ПОВТ",
+     "status": 1,
+     "created_at": 1555514942,
+     "updated_at": 1559211173,
+     "owner": null
+    }
+   },
+   "Company_create": {
+    "type": "object",
+    "properties": {
+     "user_id": {
+      "type": "integer",
+      "description": "ID пользователя"
+     },
+     "name": {
+      "type": "string",
+      "description": "Титульное название"
+     },
+     "image": {
+      "type": "string",
+      "description": "Ссылка на картинку"
+     },
+     "website": {
+      "type": "string",
+      "description": "Ссылка на сайт компании"
+     },
+     "activity_field": {
+      "type": "string",
+      "description": "Сфера деятельности компании"
+     },
+     "vk": {
+      "type": "string",
+      "description": "Ссылка на группу во Вконтакте"
+     },
+     "facebook": {
+      "type": "string",
+      "description": "Ссылка на группа на Facebook"
+     },
+     "instagram": {
+      "type": "string",
+      "description": "Ссылка на профиль в Instagram"
+     },
+     "skype": {
+      "type": "string",
+      "description": "Рабочий skype компании"
+     },
+     "description": {
+      "type": "string",
+      "description": "Информация о компании"
+     },
+     "contact_person": {
+      "type": "string",
+      "description": "Контактное лицо"
+     },
+     "status": {
+      "type": "integer",
+      "description": "Статус 1 - активен, 0 - неактивен"
+     },
+     "phone": {
+      "type": "string",
+      "description": "Контактный номер телефона"
+     }
+    },
+    "example": {
+     "user_id": 39,
+     "name": "Craft-Group",
+     "image": "https://rabota.today/media/company/42/4b/cac45896eecd8b4152abada18e8c.png",
+     "website": "https://web-artcraft.com/",
+     "activity_field": "Разработка сайтов",
+     "vk": "https://vk.com/web_craft_group",
+     "facebook": "https://www.facebook.com/groups/2071589713151084/",
+     "instagram": "https://www.instagram.com/explore/tags/craft-group/",
+     "skype": "craftgroup459",
+     "description": "Молодая и дружная команда занимающаяся разработкой сайтов",
+     "contact_person": "Дмитрий Завадский",
+     "status": 1,
+     "phone": 380714086945
+    }
+   },
    "Vacancy_create": {
     "type": "object",
     "properties": {
@@ -864,6 +1193,93 @@
      "updated_at": 1565008907,
      "owner": 4,
      "update_time": null
+    }
+   },
+   "Company": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "integer",
+      "description": "ID компании"
+     },
+     "user_id": {
+      "type": "integer",
+      "description": "ID компании"
+     },
+     "name": {
+      "type": "string",
+      "description": "Название компании"
+     },
+     "image_url": {
+      "type": "string",
+      "description": "Адрес картинки"
+     },
+     "website": {
+      "type": "string",
+      "description": "Сайт компании"
+     },
+     "activity_field": {
+      "type": "string",
+      "description": "Сфера деятельности"
+     },
+     "vk": {
+      "type": "string",
+      "description": "Ссылка на группу или страницу ВК"
+     },
+     "facebook": {
+      "type": "string",
+      "description": "Ссылка на группу или страницу facebook"
+     },
+     "instagram": {
+      "type": "string",
+      "description": "Ссылка на инстаграмм профиль компании"
+     },
+     "skype": {
+      "type": "string",
+      "description": "Skype компании"
+     },
+     "description": {
+      "type": "string",
+      "description": "Информация о компании"
+     },
+     "contact_person": {
+      "type": "string",
+      "description": "Контактное лицо"
+     },
+     "status": {
+      "type": "integer",
+      "description": "Статус 1 - активно, 0 - неактивно"
+     },
+     "created_at": {
+      "type": "integer",
+      "description": "дата создания"
+     },
+     "updated_at": {
+      "type": "integer",
+      "description": "дата последнего редактирования"
+     },
+     "owner": {
+      "type": "integer",
+      "description": "ID владельца"
+     }
+    },
+    "example": {
+     "id": 18,
+     "user_id": 39,
+     "name": "Craft-Group",
+     "image_url": "https://rabota.today/media/company/42/4b/cac45896eecd8b4152abada18e8c.png",
+     "website": "https://web-artcraft.com/",
+     "activity_field": "Разработка сайтов",
+     "vk": "https://vk.com/web_craft_group",
+     "facebook": "https://www.facebook.com/groups/2071589713151084/",
+     "instagram": "https://www.instagram.com/explore/tags/craft-group/",
+     "skype": "craftgroup459",
+     "description": "Молодая и дружная команда занимающаяся разработкой сайтов",
+     "contact_person": "Дмитрий Завадский",
+     "status": 1,
+     "created_at": 1563460316,
+     "updated_at": 1563460316,
+     "owner": 39
     }
    },
    "RegistrationForm": {

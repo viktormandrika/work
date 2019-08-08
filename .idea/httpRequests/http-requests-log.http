@@ -1,3 +1,113 @@
+GET http://work.loc/request/education
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T031510.400.json
+
+###
+
+GET http://work.loc/request/vacancy?=
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T113327.400.json
+
+###
+
+GET http://work.loc/request/company/my-index?=
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T113108.400.json
+
+###
+
+GET http://work.loc/request/company
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T113040.400.json
+
+###
+
+GET http://work.loc/request/category/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T112837-2.400.json
+
+###
+
+GET http://work.loc/request/category/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T112837-1.400.json
+
+###
+
+GET http://work.loc/request/category/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T112837.400.json
+
+###
+
+GET http://work.loc/request/category/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T112836.400.json
+
+###
+
+GET http://work.loc/request/category
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T112811.400.json
+
+###
+
+GET http://work.loc/request/category
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T112718.400.json
+
+###
+
+POST http://work.loc/request/category
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
+<> 2019-08-08T112710.400.json
+
+###
+
 POST http://work.loc/request/vacancy/create?company_id=19&post=httpclient&status=1&category=1
 Accept: */*
 Cache-Control: no-cache
@@ -385,114 +495,6 @@ Content-Type: application/json
 Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
 
 <> 2019-08-06T032639-1.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032639.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032608.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032542.200.json
-
-###
-
-GET http://work.loc/request/vacancy
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032533.200.json
-
-###
-
-GET http://work.loc/personal_area/default/statistics
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-
-<> 2019-06-06T014115.200.html
-
-###
-
-OPTIONS http://work.loc/personal_area/default/statistics
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-
-<> 2019-06-06T014102.200.html
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013638.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013634.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013633-1.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013633.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013631.200.json
 
 ###
 

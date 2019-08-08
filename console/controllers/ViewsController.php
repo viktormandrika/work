@@ -1,16 +1,13 @@
 <?php
+namespace console\controllers;
 
-use yii\db\Migration;
+use common\classes\Debug;
+use Yii;
+use yii\console\Controller;
 
-/**
- * Class m190806_092720_change_views_table
- */
-class m190806_092720_change_views_table extends Migration
+class ViewsController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function safeUp()
+    public function actionIndex()
     {
         $views = Yii::$app->db->createCommand('SELECT * FROM views')->queryAll();
         Yii::$app->db->createCommand('DELETE FROM views')->execute();
@@ -24,16 +21,5 @@ class m190806_092720_change_views_table extends Migration
                 'dt_view' => $view['dt_view'],
             ])->execute();
         }
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function safeDown()
-    {
-        echo "m190806_092720_change_views_table cannot be reverted.\n";
-
-        return false;
     }
 }

@@ -6,33 +6,33 @@ info:
 host: work.loc
 basePath: "/request"
 tags:
-- name: Вакансии
-  description: Операции с вакансиями
-- name: Группы
-  description: Операции с группами
-- name: Каналы
-  description: Операции с каналами
-- name: Аватарки
-  description: Операции с аватарками
-- name: Пользователи
-  description: Операции с пользователями
-- name: Сообщения
-  description: Операции с сообщениями
-- name: Аттачменты к сообщениями
-  description: Операции с аттачментами к сообщениям
-- name: Ссылки
-  description: Парсинг ссылок на мета теги
+  - name: Вакансии
+    description: Операции с вакансиями
+  - name: Группы123456
+    description: Операции с группами
+  - name: Каналы
+    description: Операции с каналами
+  - name: Аватарки
+    description: Операции с аватарками
+  - name: Пользователи
+    description: Операции с пользователями
+  - name: Сообщения
+    description: Операции с сообщениями
+  - name: Аттачменты к сообщениями
+    description: Операции с аттачментами к сообщениям
+  - name: Ссылки
+    description: Парсинг ссылок на мета теги
 schemes:
-- http
-- https 
+  - http
+  - https
 security:
-  - bearerAuth: []  
+  - bearerAuth: []
 consumes:
-- application/json
-- application/xml
+  - application/json
+  - application/xml
 produces:
-- application/json
-- application/xml
+  - application/json
+  - application/xml
 paths:
   #======================
   # ===== Вакансии
@@ -66,13 +66,13 @@ paths:
             format: string
       responses:
         "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref : "#/components/schemas/Vacancy"
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref : "#/components/schemas/Vacancy"
   "/request/vacancy/my-index":
-    get: 
+    get:
       summary: "Просмотр всех вакансий текущего пользователя"
       description: "Для того что-бы посмотреть вакансию, нужно отпрвавить <br>GET</b> запрос на <b>/request/vacancy/my-index</b>. Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br>
         Список параметров: <br>
@@ -83,7 +83,7 @@ paths:
         - vacancy_skill - требуемые навыки<br>
         - category - категория вакансии<br>
         - can_update - возможность поднятия вакансии выше в списке"
-      tags: 
+      tags:
         - Вакансии
       parameters:
         - name: expand
@@ -92,14 +92,14 @@ paths:
           schema:
             type: string
             format: string
-            
+
       responses:
         "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref : "#/components/schemas/Vacancy"
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref : "#/components/schemas/Vacancy"
   "/request/vacancy/create":
     post:
       summary: "Добавление вакансии"
@@ -143,13 +143,13 @@ paths:
                 working_conditions:
                   type: string
                   example: ""
-                video: 
+                video:
                   type: string
                   example: ""
                 city:
                   type: string
                   example: ""
-                address: 
+                address:
                   type: string
                   example: ""
                 home_number:
@@ -164,10 +164,10 @@ paths:
       responses:
         "200":
           description: OK
-          content: 
+          content:
             application/json:
               schema:
-                  $ref : "#/components/schemas/Vacancy_create"
+                $ref : "#/components/schemas/Vacancy_create"
   "/request/vacancy/update":
     put:
       summary: "Редактирование вакансии"
@@ -217,13 +217,13 @@ paths:
                 working_conditions:
                   type: string
                   example: ""
-                video: 
+                video:
                   type: string
                   example: ""
                 city:
                   type: string
                   example: ""
-                address: 
+                address:
                   type: string
                   example: ""
                 home_number:
@@ -238,10 +238,10 @@ paths:
       responses:
         "200":
           description: OK
-          content: 
+          content:
             application/json:
               schema:
-                  $ref : "#/components/schemas/Vacancy_create"
+                $ref : "#/components/schemas/Vacancy_create"
   "/request/vacancy/delete":
     delete:
       summary: "Удаление  вакансии"
@@ -257,7 +257,7 @@ paths:
             format: integer
       responses:
         "200":
-            description: OK
+          description: OK
   "/user/search_request={request}&page={page}":
     get:
       summary: "Поиск пользователей"
@@ -281,7 +281,7 @@ paths:
       responses:
         "200":
           description: "OK"
-          
+
   "/user/profile/{user_id}":
     put:
       summary: "Редактирование профиля"
@@ -335,8 +335,8 @@ paths:
             application/json:
               schema:
                 $ref : "#/components/schemas/User"
-      
-          
+
+
   #======================
   # ===== ГРУППЫ
   #======================        
@@ -350,9 +350,9 @@ paths:
         - Bearer: []
       responses:
         200:
-            description: OK
-            schema:
-              $ref: "#/components/schemas/Group"
+          description: OK
+          schema:
+            $ref: "#/components/schemas/Group"
     post:
       summary: Добавление группы
       description: Для того, чтобы добавить группу, необходимо отправить POST запрос на /v1/group
@@ -382,7 +382,7 @@ paths:
             enum:
               - active
               - disable
-            default: active  
+            default: active
         - name : owner_id
           in : formData
           description: Идентификатор создателя группы
@@ -396,8 +396,8 @@ paths:
             type: array
             items:
               type: integer
-            minItems: 1  
-        - name : avatar  
+            minItems: 1
+        - name : avatar
 
   #======================
   # ===== ССЫЛКИ
@@ -409,12 +409,12 @@ paths:
       tags:
         - Ссылки
       parameters:
-      - in: query
-        name: link
-        required: true
-        schema:
-          type: string
-          example: https://laravel.com
+        - in: query
+          name: link
+          required: true
+          schema:
+            type: string
+            example: https://laravel.com
       responses:
         '200':
           description: OK
@@ -432,12 +432,12 @@ paths:
       tags:
         - Ссылки
       parameters:
-      - in: query
-        name: link
-        required: true
-        schema:
-          type: string
-          example: Laravel документация по ссылке https://laravel.com
+        - in: query
+          name: link
+          required: true
+          schema:
+            type: string
+            example: Laravel документация по ссылке https://laravel.com
       responses:
         '200':
           description: OK
@@ -452,19 +452,19 @@ paths:
 #======================
 components:
   securitySchemes:
-      bearerAuth:            # arbitrary name for the security scheme
-        type: http
-        scheme: bearer
-        bearerFormat: JWT    
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-  
+
     Vacancy_create:
       type: object
       properties:
         company_id:
           type: integer
           description: ID компании разместившей вакансию
-        post: 
+        post:
           type: string
           description: Титульное название
         responsibilities:
@@ -502,7 +502,7 @@ components:
           description: Номер дома
         employment_type_id:
           type: integer
-          description: Тип работы 
+          description: Тип работы
         views:
           type: integer
           description: Количество просмотров
@@ -511,7 +511,7 @@ components:
           description: Статус
       example:
         company_id: 18
-        post: PHP Разработчик 
+        post: PHP Разработчик
         responsibilities: Разработка сайтов
         min_salary: 15000
         max_salary: 30000
@@ -526,17 +526,17 @@ components:
         home_number: 128
         employment_type_id: 3
         status: 1
-       
+
     Vacancy:
       type: object
-      properties: 
+      properties:
         id:
           type: integer
           description: ID вакансии
-        company_id: 
+        company_id:
           type: integer
           description: ID компании разместившей вакансию
-        post: 
+        post:
           type: string
           description: Титульное название
         responsibilities:
@@ -574,7 +574,7 @@ components:
           description: Номер дома
         employment_type_id:
           type: integer
-          description: Тип работы 
+          description: Тип работы
         views:
           type: integer
           description: Количество просмотров
@@ -596,7 +596,7 @@ components:
       example:
         id: 5
         company_id: 1
-        post: PHP Developer 
+        post: PHP Developer
         responsibilities: Разработка сайтов
         min_salary: 15000
         max_salary: 30000
@@ -615,7 +615,7 @@ components:
         updated_at: 1565008907
         owner: 4
         update_time: null
-        
+
     RegistrationForm:
       type: object
       properties:
@@ -625,10 +625,10 @@ components:
         password:
           type: string
           description: Пароль пользователя
-        password_confirmation: 
+        password_confirmation:
           type: string
           description: Подтверждение пароля пользователя
-        email : 
+        email :
           type: string
           format: email
           description: Email, указанный при регистрации
@@ -636,7 +636,7 @@ components:
         - username
         - password
         - password_confirmation
-        - email    
+        - email
       example:
         username: Jessica Smith
         password: 1234qwer
@@ -644,7 +644,7 @@ components:
         email: jessica@gmail.com
       xml:
         name: RegistrationForm
-    
+
     LoginForm:
       type: object
       properties:
@@ -653,7 +653,7 @@ components:
           enum:
             - password
             - refresh_token
-          default: password  
+          default: password
           description: "Тип запроса токена"
         client_id:
           type: integer
@@ -680,13 +680,13 @@ components:
       example:
         grant_type: "password"
         client_id: 1
-        client_secret: "HJnYUlzOSXOxoIc15HMlxUJb1SNzaeYKn0tSMBls"    
+        client_secret: "HJnYUlzOSXOxoIc15HMlxUJb1SNzaeYKn0tSMBls"
         username: "jessica@gmail.com"
-        password: "1234qwer"  
+        password: "1234qwer"
         refresh_token: "oIc15HMlxUJb1SNzaeYKn0tSMBls..."
     xml:
-        name: LoginForm
-        
+      name: LoginForm
+
     User:
       type: object
       properties:
@@ -698,11 +698,11 @@ components:
           type: string
           description: Пароль пользователя
           password: 1234qwer
-        password_confirmation: 
+        password_confirmation:
           type: string
           description: Подтверждение пароля пользователя
           password_confirmation: 1234qwer
-        email: 
+        email:
           type: string
           format: email
           description: Email, указанный при регистрации
@@ -713,10 +713,10 @@ components:
         - username
         - password
         - password_confirmation
-        - email    
+        - email
       xml:
         name: User
-        
+
     Avatar:
       type: object
       properties:
@@ -743,8 +743,8 @@ components:
         average: "http://files.newchannels.loc/img/channel/0/04/04882234d9761dc7072283ba61e2c29b_400.jpg"
         small: "http://files.newchannels.loc/img/channel/0/04/04882234d9761dc7072283ba61e2c29b_150.jpg"
       xml:
-        name: Avatar     
-        
+        name: Avatar
+
     Group:
       type: object
       properties:
@@ -777,11 +777,11 @@ components:
         - owner_id
       xml:
         name: Group
-        
+
     Channel:
       type: object
       properties:
-        channel_id : 
+        channel_id :
           type: integer
           format: int64
           example: 6
@@ -796,15 +796,15 @@ components:
           enum:
             - active
             - disable
-          default: active  
-          example: active  
+          default: active
+          example: active
         type:
           type: string
           enum:
             - chat
             - wall
-          default: chat  
-          example: chat  
+          default: chat
+          example: chat
         private:
           type: integer
           enum: [0, 1]
@@ -822,10 +822,10 @@ components:
           type: array
           items:
             type: integer
-          minItems: 1  
+          minItems: 1
       xml:
-        name: Channel  
-        
+        name: Channel
+
     Link:
       type: object
       properties:

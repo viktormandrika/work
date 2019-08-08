@@ -1,4 +1,7 @@
 <!-- HTML for static distribution bundle build -->
+<?php
+$this->title = 'API Работа';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

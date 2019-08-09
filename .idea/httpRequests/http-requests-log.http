@@ -4,6 +4,16 @@ Cache-Control: no-cache
 Content-Type: application/json
 Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
 
+<> 2019-08-09T113524.400.json
+
+###
+
+GET http://work.loc/request/education
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
+
 <> 2019-08-08T031510.400.json
 
 ###
@@ -485,16 +495,6 @@ Content-Type: application/json
 Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
 
 <> 2019-08-06T032639-2.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032639-1.200.json
 
 ###
 

@@ -21,7 +21,8 @@ class MessageController extends MyActiveController
         return $actions;
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::className()
@@ -31,18 +32,21 @@ class MessageController extends MyActiveController
 
     public function prepareDataProvider()
     {
-        if(Yii::$app->user->isGuest)
+        if (Yii::$app->user->isGuest) {
             throw new HttpException(201, 'Пользователь не авторизирован');
+        }
         $requestParams = Yii::$app->getRequest()->getBodyParams();
         if (empty($requestParams)) {
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
-        $query=Message::find();
-        if(isset($requestParams['type'])){
-            if($requestParams['type']==='incoming'){
-                $query->andWhere(['receiver_id'=>Yii::$app->user->id]);
-            } else if($requestParams['type']==='outgoing'){
-                $query->andWhere(['sender_id'=>Yii::$app->user->id]);
+        $query = Message::find();
+        if (isset($requestParams['type'])) {
+            if ($requestParams['type'] === 'incoming') {
+                $query->andWhere(['receiver_id' => Yii::$app->user->id]);
+            } else {
+                if ($requestParams['type'] === 'outgoing') {
+                    $query->andWhere(['sender_id' => Yii::$app->user->id]);
+                }
             }
         }
         return Yii::createObject([
@@ -56,6 +60,7 @@ class MessageController extends MyActiveController
             ],
         ]);
     }
+
     /**
      * @param string $action
      * @param Message $model
@@ -64,11 +69,13 @@ class MessageController extends MyActiveController
      */
     public function checkAccess($action, $model = null, $params = [])
     {
-        if($action != 'index'){
-            if(Yii::$app->user->isGuest)
+        if ($action != 'index') {
+            if (Yii::$app->user->isGuest) {
                 throw new HttpException(403, 'Вы не авторизированы');
-            if($model->receiver_id != Yii::$app->user->id && $model->sender_id != Yii::$app->user->id)
+            }
+            if ($model->receiver_id != Yii::$app->user->id && $model->sender_id != Yii::$app->user->id) {
                 throw new HttpException(403, 'Отказано в доступе');
+            }
         }
     }
 

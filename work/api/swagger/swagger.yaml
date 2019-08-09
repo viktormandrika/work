@@ -16,12 +16,16 @@ tags:
     description: Операции с образованием
   - name: Работодатели
     description: Операции с работодателями
-  - name: Сообщения
-    description: Операции с сообщениями
-  - name: Аттачменты к сообщениями
-    description: Операции с аттачментами к сообщениям
-  - name: Ссылки
-    description: Парсинг ссылок на мета теги
+  - name: Тип занятости
+    description: Операции с типами занятости
+  - name: Опыт работы
+    description: Операции с опытом работы
+  - name: Резюме
+    description: Операции с резюме
+  - name: Отклики
+    description: Операции с откликами
+  - name: Навыки
+    description: Операции с навыками
 schemes:
   - http
   - https
@@ -300,9 +304,22 @@ paths:
   "/request/company/":
     get:
       summary: "Просмотр всех компаний"
-      description: "Для того, чтобы посмотреть все компании, необходимо отправить <b>GET</b> запрос на <b>/request/company</b>."
+      description: "Для того, чтобы посмотреть все компании, необходимо отправить <b>GET</b> запрос на <b>/request/company</b>.
+      Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+      - user оздатель компании <br>
+      - vacancy вакансии компании <br>
+      - phone номер телефона компании <br>
+      - userCompany список пользователей компании <br>
+      - users информация о пользователях"
       tags:
         - Компании
+      parameters:
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
       responses:
         "200":
           description: "OK"
@@ -313,16 +330,28 @@ paths:
   "/request/company/{company_id}":
     get:
       summary: "Просмотр одной компании"
-      description: "Для того, чтобы посмотреть конкретную компанию, необходимо отправить <b>GET</b> запрос на <b>/request/company/{company_id}</b>."
+      description: "Для того, чтобы посмотреть конкретную компанию, необходимо отправить <b>GET</b> запрос на <b>/request/company/{company_id}</b>.
+      Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+            - user оздатель компании <br>
+            - vacancy вакансии компании <br>
+            - phone номер телефона компании <br>
+            - userCompany список пользователей компании <br>
+            - users информация о пользователях"
       tags:
         - Компании
       parameters:
         - name: company_id
           in: path
-          description: "Vacancy ID"
+          description: "Company ID"
           schema:
             type: integer
             format: int64
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
       responses:
         "200":
           description: OK
@@ -333,9 +362,22 @@ paths:
   "/request/company/my-index":
     get:
       summary: "Просмотр всех компаний текущего пользователя"
-      description: "Для того что-бы посмотреть вакансию, нужно отпрвавить <br>GET</b> запрос на <b>/request/vacancy/my-index</b>."
+      description: "Для того что-бы посмотреть вакансию, нужно отпрвавить <br>GET</b> запрос на <b>/request/vacancy/my-index</b>.
+      Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+            - user оздатель компании <br>
+            - vacancy вакансии компании <br>
+            - phone номер телефона компании <br>
+            - userCompany список пользователей компании <br>
+            - users информация о пользователях"
       tags:
         - Компании
+      parameters:
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
       responses:
         "200":
           description: OK
@@ -542,9 +584,20 @@ paths:
   "/request/employer":
     get:
       summary: "Просмотр всех работодателей"
-      description: "Для того, чтобы посмотреть всех работодателей, необходимо отправить <b>GET</b> запрос на <b>/request/employer</b>."
+      description: "Для того, чтобы посмотреть всех работодателей, необходимо отправить <b>GET</b> запрос на <b>/request/employer</b>.
+      Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+      - resume информация о резюме работодателя <br>
+      - user информация о пользователе<br>
+      - phone Телефон"
       tags:
         - Работодатели
+      parameters:
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
       responses:
         "200":
           description: "OK"
@@ -552,6 +605,579 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Employer"
+  "/request/employer/{employer_id}":
+    get:
+      summary: "Просмотр конкретного работодателя"
+      description: "Для того что-бы посмотреть работодателя, нужно отпрвавить <br>GET</b> запрос на <b>/request/employer/{employer_id}</b>.
+      Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br>
+      Список параметров: <br>
+      - resume информация о резюме работодателя <br>
+      - user информация о пользователе<br>
+      - phone Телефон"
+      tags:
+        - Работодатели
+      parameters:
+        - name: employer_id
+          in: path
+          description: "Employer ID"
+          schema:
+            type: integer
+            format: int64
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employer"
+  "/request/employer/my-index":
+    get:
+      summary: "Просмотр авторизованного работодателя"
+      description: "Для того что-бы посмотреть работодателя, нужно отпрвавить <br>GET</b> запрос на <b>/request/employer/{employer_id}</b>.
+            Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br>
+            Список параметров: <br>
+            - resume информация о резюме работодателя <br>
+            - user информация о пользователе<br>
+            - phone Телефон"
+      tags:
+        - Работодатели
+      parameters:
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employer"
+  "/request/employer/{empolyerID}":
+    put:
+      summary: "Редактирование работодетеля"
+      description: "Для того чтобы редактировать работодателя, необходимо отправить <b>PUT</b> запрос на <b>/request/employer/{employerID}</b>"
+      tags:
+        - Работодатели
+      parameters:
+        - name: empolyerID
+          in: path
+          description: "Employer_ID"
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: ""
+                first_name:
+                  type: string
+                  example: ""
+                second_name:
+                  type: string
+                  example: ""
+                birth_date:
+                  type: date
+                  example: ""
+                phone:
+                  type: string
+                  example: ""
+                email:
+                  type: string
+                  example: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employer_update"
+  #======================
+  # ===== Тип занятости
+  #======================
+  "/request/employment-type":
+    get:
+      summary: "Просмотр всех типов занятости"
+      description: "Для того, чтобы посмотреть все типы занятости, необходимо отправить <b>GET</b> запрос на <b>/request/employment-type</b>."
+      tags:
+        - Тип занятости
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employment_type"
+  "/request/employment-type/{type_id}":
+    get:
+      summary: "Просмотр конкретного типа занятости"
+      description: "Для того, чтобы посмотреть тип занятости, необходимо отправить <b>GET</b> запрос на <b>/request/employment-type/{type_id}</b>."
+      tags:
+        - Тип занятости
+      parameters:
+        - name: type_id
+          in: path
+          description: "Type ID"
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employment_type"
+  #======================
+  # ===== Опыт работы
+  #======================
+  "/request/experience":
+    get:
+      summary: "Просмотр всех бланков с опытом работы"
+      description: "Для того, чтобы посмотреть все бланки опыта работы, необходимо отправить <b>GET</b> запрос на <b>/request/experience</b>."
+      tags:
+        - Опыт работы
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Experience"
+  "/request/experience/{experienceID}":
+    get:
+      summary: "Просмотр конкретного опыта работы"
+      description: "Для того, чтобы посмотреть опыт работы, необходимо отправить <b>GET</b> запрос на <b>/request/experience/{experienceID}</b>."
+      tags:
+        - Опыт работы
+      parameters:
+        - name: experienceID
+          in: path
+          description: "Experience ID"
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Experience"
+  #======================
+  # ===== Резюме
+  #======================
+  "/request/resume/":
+    get:
+      summary: "Просмотр всех резюме"
+      description: "Для того, чтобы посмотреть все резюме, необходимо отправить <b>GET</b> запрос на <b>/request/resume</b>.
+      Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+            - employer создатель резюме <br>
+            - experience опыт указанный в резюме <br>
+            - education образование указанное в резюме <br>
+            - category категория к которой относится резюме <br>
+            - employment_type тип работы указанный в резюме <br>
+            - views0 информация о просмотрах резюме <br>
+            - countViews количество просмотров резюме <br>
+            - can_update возможность поднять резюме по списку <br>
+            - skills информация о навыках указанных в резюме"
+      tags:
+        - Резюме
+      parameters:
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resume"
+  "/request/resume/{resume_ID}":
+    get:
+      summary: "Просмотр одного резюме"
+      description: "Для того, чтобы посмотреть все резюме, необходимо отправить <b>GET</b> запрос на <b>/request/resume/{resume_ID}</b>.
+          Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+                - employer создатель резюме <br>
+                - experience опыт указанный в резюме <br>
+                - education образование указанное в резюме <br>
+                - category категория к которой относится резюме <br>
+                - employment_type тип работы указанный в резюме <br>
+                - views0 информация о просмотрах резюме <br>
+                - countViews количество просмотров резюме <br>
+                - can_update возможность поднять резюме по списку <br>
+                - skills информация о навыках указанных в резюме"
+      tags:
+        - Резюме
+      parameters:
+        - name: resume_ID
+          in: path
+          description: "Resume ID"
+          schema:
+            type: integer
+            format: int64
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resume"
+    put:
+      summary: "Редактирование резюме"
+      description: "Для того, чтобы редактировать резюме, необходимо отправить <b>PUT</b> запрос на <b>/request/resume/{resume_ID}</b>"
+      tags:
+        - Резюме
+      parameters:
+        - name: resume_ID
+          in: path
+          description: "Resume_ID"
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: array
+                  items:
+                    type: integer
+                city:
+                  type: string
+                  example: ""
+                description:
+                  type: string
+                  example: ""
+                education:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      academic_degree:
+                        type: string
+                        example: ""
+                      faculty:
+                        type: string
+                        example: ""
+                      name:
+                        type: string
+                        example: ""
+                      specialization:
+                        type: string
+                        example: ""
+                      year_from:
+                        type: integer
+                        example: ""
+                      year_to:
+                        type: integer
+                        example: ""
+                facebook:
+                  type: string
+                  example: ""
+                image:
+                  type: object
+                  properties:
+                    changeImg:
+                      type: string
+                      example: "false"
+                instagram:
+                  type: string
+                  example: ""
+                max_salary:
+                  type: decimal
+                  example: ""
+                min_salary:
+                  type: decimal
+                  example: ""
+                skills:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: ""
+                      name:
+                        type: string
+                        example: ""
+                skype:
+                  type: string
+                  example: ""
+                title:
+                  type: string
+                  example: ""
+                vk:
+                  type: string
+                  example: ""
+                work:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      month_from:
+                        type: integer
+                        example: ""
+                      month_to:
+                        type: integer
+                        example: ""
+                      name:
+                        type: string
+                        example: ""
+                      post:
+                        type: string
+                        example: ""
+                      responsibility:
+                        type: string
+                        example: ""
+                      year_from:
+                        type: integer
+                        example: ""
+                      year_to:
+                        type: integer
+                        example: ""
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resume_create"
+    delete:
+      summary: "Удаление резюме"
+      description: "Для того, чтобы удалить резюме, необходимо отправить <b>DELETE</b> запрос на <b>/request/resume/{resume_ID}</b>"
+      tags:
+        - Резюме
+      parameters:
+        - name: resume_ID
+          in: path
+          description: "Resume_ID"
+          schema:
+            type: integer
+            format: integer
+      responses:
+        "200":
+          description: OK
+  "/request/resume":
+    post:
+      summary: "Добавление резюме"
+      description: "Для того, чтобы добавить новое резюме, необходимо отправить <b>POST</b> запрос на <b>/request/resume</b>"
+      tags:
+        - Резюме
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: array
+                  items:
+                    type: integer
+                city:
+                  type: string
+                  example: ""
+                description:
+                  type: string
+                  example: ""
+                education:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      academic_degree:
+                        type: string
+                        example: ""
+                      faculty:
+                        type: string
+                        example: ""
+                      name:
+                        type: string
+                        example: ""
+                      specialization:
+                        type: string
+                        example: ""
+                      year_from:
+                        type: integer
+                        example: ""
+                      year_to:
+                        type: integer
+                        example: ""
+                facebook:
+                  type: string
+                  example: ""
+                image:
+                  type: string
+                  example: ""
+                instagram:
+                  type: string
+                  example: ""
+                max_salary:
+                  type: decimal
+                  example: ""
+                min_salary:
+                  type: decimal
+                  example: ""
+                skills:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: ""
+                      name:
+                        type: string
+                        example: ""
+                skype:
+                  type: string
+                  example: ""
+                title:
+                  type: string
+                  example: ""
+                vk:
+                  type: string
+                  example: ""
+                work:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      month_from:
+                        type: integer
+                        example: ""
+                      month_to:
+                        type: integer
+                        example: ""
+                      name:
+                        type: string
+                        example: ""
+                      post:
+                        type: string
+                        example: ""
+                      responsibility:
+                        type: string
+                        example: ""
+                      year_from:
+                        type: integer
+                        example: ""
+                      year_to:
+                        type: integer
+                        example: ""
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resume_create"
+  #======================
+  # ===== Отклики
+  #======================
+  "/request/message":
+    get:
+      summary: "Получение списка откликов"
+      description: "Для получения списка откликов необходимо отправить <b>GET</b> запрос на <b>/request/message</b>.
+      Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+            - receiver информация об отправителе <br>
+            - sender информация о получателе"
+      tags:
+        - Отклики
+      parameters:
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+  #======================
+  # ===== Навыки
+  #======================
+  "/request/skill":
+    get:
+      summary: "Просмотр всех возможных навыков"
+      description: "Для того, чтобы посмотреть все навыки, необходимо отправить <b>GET</b> запрос на <b>/request/skill</b>.
+            Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+            - resume резюме где используются даные навыки <br>
+            - vacancy вакансии где используются даные навыки<br>
+            - vacancy_skill ?????<br>
+            - resume_skill ??????"
+      tags:
+        - Навыки
+      parameters:
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+  "/request/skill/{skill_id}":
+    get:
+      summary: "Просмотр одного навыка"
+      description: "Для того, чтобы навык, необходимо отправить <b>GET</b> запрос на <b>/request/skill/{skill_id}</b>.
+                Также существует необязательный параметр <b>expand</b> в который через запятую можно вводить параметры <br> Список параметров: <br>
+                - resume резюме где используются даные навыки <br>
+                - vacancy вакансии где используются даные навыки<br>
+                - vacancy_skill ?????<br>
+                - resume_skill ??????"
+      tags:
+        - Навыки
+      parameters:
+        - name: skill_id
+          in: path
+          description: "Skill_ID"
+          schema:
+            type: integer
+        - name: expand
+          in: query
+          description: "Expand"
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
 #=======================
 #===== КОМПОНЕНТЫ
 #======================
@@ -562,6 +1188,381 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+
+    Skill:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID навыка
+        name:
+          type: string
+          description: Название навыка
+      example:
+        id: 9
+        name: PHP
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID отклика
+        title:
+          type: string
+          description: Заглавие отклика
+        text:
+          type: string
+          description: Текст отклика
+        receiver_id:
+          type: integer
+          description: ID получателя
+        sender_id:
+          type: integer
+          description: ID отправителя
+        subject:
+          type: string
+          description: Субъект отклика
+        subject_id:
+          type: integer
+          description: ID субъекта
+        subject_from:
+          type: string
+          description: Сущность прикрепленная к сообщению
+        subject_from_id:
+          type: integer
+          description: ID сущности
+        created_at:
+          type: integer
+          description: Дата создания
+        updated_at:
+          type: integer
+          description: Дата редактирования
+      example:
+        id: 8
+        title: Хороший сотрудник
+        text: Работали с этим человеком около года. Ответственный, исполнительный
+        receiver_id: 2
+        sender_id: 1234
+        subject: Resume
+        subject_id: 37
+        subject_from: null
+        subject_from_id: null
+        created_at: 1557147852
+        updated_at: 1557147852
+
+    Resume_create:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            type: integer
+            description: ID категорий
+        city:
+          type: string
+          description: Город в котором ищется работа
+        description:
+          type: string
+          description: Описание
+        education:
+          type: array
+          items:
+            type: object
+            properties:
+              academic_degree:
+                type: string
+                description: Академическая степень
+              faculty:
+                type: string
+                description: Факультет
+              name:
+                type: string
+                description: Название университета
+              specialization:
+                type: string
+                description: Специальность
+              year_from:
+                type: integer
+                description: Год начала обучения
+              year_to:
+                type: integer
+                description: Год конец обучения
+        facebook:
+          type: string
+          description: Ссылка на facebook
+        image:
+          type: string
+          description: Ссылка на картинку профиля
+        instagram:
+          type: string
+          description: Ссылка на instagram
+        max_salary:
+          type: decimal
+          description: Максимальная зарплата
+        min_salary:
+          type: decimal
+          description: Минимальная зарплата
+        skills:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: ID навыка
+              name:
+                type: string
+                description: Название навыка
+        skype:
+          type: string
+          description: Скайп для связи
+        title:
+          type: string
+          description: Титульное название
+        vk:
+          type: string
+          description: Ссылка на профиль во вконтакте
+        work:
+          type: array
+          items:
+            type: object
+            properties:
+              month_from:
+                type: integer
+                description: Месяц начало работы
+              month_to:
+                type: integer
+                description: Последний рабочий месяц
+              name:
+                type: string
+                description: Название организации
+              post:
+                type: string
+                description: Должность
+              responsibility:
+                type: string
+                description: Обязанности
+              year_from:
+                type: integer
+                description: Год начала работы
+              year_to:
+                type: integer
+                description: Год конец работы
+      example:
+        category: [1,2]
+        city: Донецк
+        description: Целеустремленный, пунктуальный
+        education:
+        - academic_degree: Бакалавр
+          faculty: ФКНТ
+          name: ДОННТУ
+          specialization: КИ
+          year_from: 2015
+          year_to: 2019
+        facebook: https://www.facebook.com/profile.php?id=100053261098437
+        image: https://rabota.today/media/company/42/4b/cac45896eecd8b4152abada18e8c.png
+        instagram: https://www.instagram.com/explore/tags/craft-group/
+        max_salary: 15000
+        min_salary: 25000
+        skills:
+        - id: 7
+          name: Верстка сайтов
+        skype: dmitriyzav4892
+        title: Ищу работу backend разработчика
+        vk: https://vk.com/id46152846
+        work:
+        - month_from: 5
+          month_to: 5
+          name: CraftGroup
+          post: Backend developer
+          responsibility: Web development
+          year_from: 2018
+          year_to: 2019
+
+    Resume:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID резюме
+        employer_id:
+          type: integer
+          description: ID работника
+        employment_type_id:
+          type: integer
+          description: ID тип работы
+        title:
+          type: string
+          description: Оглавление резюме
+        image_url:
+          type: string
+          description: Ссылка на картинку
+        min_salary:
+          type: decimal
+          description: Минимальная зарплата
+        max_salary:
+          type: decimal
+          description: Максимальная зарплата
+        city:
+          type: string
+          description: Город в котором ищется работа
+        description:
+          type: string
+          description: Описание
+        years_of_exp:
+          type: string
+          description: Количетсво полных лет опыта
+        skype:
+          type: string
+          description: Skype
+        instagram:
+          type: string
+          description: Instagram
+        facebook:
+          type: string
+          description: Facebook
+        vk:
+          type: string
+          description: Ссылка на профиль во Вконтакте
+        views:
+          type: integer
+          description: Количество просмотров резюме
+        status:
+          type: integer
+          description: Статус 1 - активен, 0 - неактивен
+        created_at:
+          type: integer
+          description: Дата создания
+        updated_at:
+          type: integer
+          description: Дата редактирования
+        owner:
+          type: integer
+          description: ID создателя
+        update_time:
+          type: integer
+          description: Время до поднятия
+      example:
+        id: 10
+        employer_id: 38
+        employment_type_id: 1
+        title: Web разработчик
+        image_url: https://rabota.today/media/company/42/4b/cac45896eecd8b4152abada18e8c.png
+        min_salary: 15000.00
+        max_salary: 25000.00
+        city: Донецк
+        description: Хороший веб разработчик
+        years_of_exp: 1
+        skype: craftgroup459
+        instagram: https://www.instagram.com/explore/tags/craft-group/
+        facebook: https://www.facebook.com/groups/2071589713151084/
+        vk: https://vk.com/web_craft_group
+        views: 60
+        status: 1
+        created_at: 1556202046
+        updated_at: 1556202046
+        owner: 2
+        update_time: 1555601544
+
+    Experience:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID опыта работы
+        resume_id:
+          type: integer
+          description: ID резюме к которому привязан опыт работы
+        name:
+          type: string
+          description: Название компании
+        post:
+          type: string
+          description: Название должности
+        responsibility:
+          type: string
+          description: Обязанности
+        month_from:
+          type: integer
+          description: месяц начала работы
+        month_to:
+          type: integer
+          description: месяц на котором закончилась работа
+        year_from:
+          type: integer
+          description: год начала работы
+        year_to:
+          type: integer
+          description: год на котором закончилась работа
+        status:
+          type: integer
+          description: Статус 1 - активен, 0 - неактивен
+        created_at:
+          type: integer
+          description: Дата создания
+        updated_at:
+          type: integer
+          description: Дата редактирования
+        owner:
+          type: integer
+          description: ID создателя
+      example:
+        id: 10
+        resume_id: 38
+        name: CraftGroup
+        post: Backend разработчик
+        responsibility: Разработка веб сайтов
+        month_from: 5
+        month_to: 5
+        year_from: 2018
+        year_to: 2019
+        status: 1
+        created_at: 1556202046
+        updated_at: 1556202046
+        owner: 2
+
+    Employment_type:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID типа занятости
+        name:
+          type: string
+          description: Название типа занятости
+      example:
+        id: 3
+        user_id: Удалённая работа
+
+    Employer_update:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: ""
+        first_name:
+          type: string
+          example: ""
+        second_name:
+          type: string
+          example: ""
+        birth_date:
+          type: date
+          example: ""
+        phone:
+          type: string
+          example: ""
+        email:
+          type: string
+          example: ""
+      example:
+        user_id: 38
+        first_name: Дмитрий
+        second_name: Завадский
+        birth_date: 2017-01-16
+        phone: 0508856699
+        email: example@mail.ru
 
     Employer:
       type: object

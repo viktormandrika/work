@@ -49,7 +49,7 @@ class Message extends WorkActiveRecord
         return [
             [['receiver_id', 'sender_id', 'subject_id', 'subject_from_id'], 'integer'],
             [['text'], 'string'],
-            [['title', 'subject', 'subject_from'], 'string', 'max'=>255],
+            [['title', 'subject', 'subject_from'], 'string', 'max' => 255],
             [['created_at', 'updated_at'], 'safe'],
         ];
     }
@@ -82,25 +82,34 @@ class Message extends WorkActiveRecord
         ];
     }
 
-    public function getSender(){
-        return $this->hasOne(User::className(), ['id'=>'sender_id']);
+    public function getSender()
+    {
+        return $this->hasOne(User::className(), ['id' => 'sender_id']);
     }
 
-    public function getReceiver(){
-        return $this->hasOne(User::className(), ['id'=>'receiver_id']);
+    public function getReceiver()
+    {
+        return $this->hasOne(User::className(), ['id' => 'receiver_id']);
     }
 
-    public function getSubject0(){
-        if($this->subject === self::SUBJECT_RESUME)
-            return $this->hasOne(Resume::className(), ['id'=>'subject_id']);
-        if($this->subject === self::SUBJECT_VACANCY)
-            return $this->hasOne(Vacancy::className(), ['id'=>'subject_id']);
+    public function getSubject0()
+    {
+        if ($this->subject === self::SUBJECT_RESUME) {
+            return $this->hasOne(Resume::className(), ['id' => 'subject_id']);
+        }
+        if ($this->subject === self::SUBJECT_VACANCY) {
+            return $this->hasOne(Vacancy::className(), ['id' => 'subject_id']);
+        }
     }
-    public function getSubject0_from(){
-        if($this->subject_from === self::SUBJECT_RESUME)
-            return $this->hasOne(Resume::className(), ['id'=>'subject_from_id']);
-        if($this->subject_from === self::SUBJECT_VACANCY)
-            return $this->hasOne(Vacancy::className(), ['id'=>'subject_from_id']);
+
+    public function getSubject0_from()
+    {
+        if ($this->subject_from === self::SUBJECT_RESUME) {
+            return $this->hasOne(Resume::className(), ['id' => 'subject_from_id']);
+        }
+        if ($this->subject_from === self::SUBJECT_VACANCY) {
+            return $this->hasOne(Vacancy::className(), ['id' => 'subject_from_id']);
+        }
     }
 
 }

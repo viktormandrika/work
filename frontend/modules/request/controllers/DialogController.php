@@ -2,6 +2,7 @@
 
 namespace frontend\modules\request\controllers;
 
+use common\classes\Debug;
 use common\models\Dialog;
 use common\models\DialogUser;
 use common\models\Message;
@@ -59,5 +60,13 @@ class DialogController extends MyActiveController
                 'params' => $requestParams,
             ],
         ]);
+    }
+
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        parent::checkAccess($action, $model, $params);
+        if($model )
+            if(!Dialog::find()->joinWith(['users'])->where(['user.id'=>Yii::$app->user->id, 'dialog.id'=>$model->id])->count())
+                throw new HttpException(403, 'У вас нет прав для просмотра этой записи');
     }
 }

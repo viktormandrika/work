@@ -18,8 +18,8 @@ class DialogMessageController extends MyActiveController
     public function actions()
     {
         $actions = parent::actions();
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-        unset($actions['create'], $actions['delete'], $actions['update']);
+        //$actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+        unset($actions['create'], $actions['delete'], $actions['update'], $actions['index']);
         return $actions;
     }
 
@@ -50,6 +50,7 @@ class DialogMessageController extends MyActiveController
             }
             else throw new HttpException(201, 'Такого диалога не существует');
         }
+        return true;
     }
 
     public function prepareDataProvider()

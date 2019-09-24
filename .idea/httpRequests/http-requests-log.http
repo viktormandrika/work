@@ -1,3 +1,389 @@
+POST http://work.loc/request/dialog-message/send-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"dialog_id":1, "text":"fdfdf"}
+
+<> 2019-09-23T054802.200.json
+
+###
+
+POST http://work.loc/request/dialog-message/send-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"dialog_id":1, "text":"fdfdf"}
+
+<> 2019-09-23T054747.200.json
+
+###
+
+POST http://work.loc/request/dialog-message/send-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"dialog_id":1, "text":"fdfdf"}
+
+<> 2019-09-23T054746-1.200.json
+
+###
+
+POST http://work.loc/request/dialog-message/send-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"dialog_id":1, "text":"fdfdf"}
+
+<> 2019-09-23T054746.200.json
+
+###
+
+POST http://work.loc/request/dialog-message/send-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"dialog_id":1, "text":"fdfdf"}
+
+<> 2019-09-23T054745.200.json
+
+###
+
+POST http://work.loc/request/dialog-message/send-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"dialog_id":1, "text":"fdfdf"}
+
+<> 2019-09-23T054714.200.json
+
+###
+
+GET http://work.loc/request/dialog-message/my-index?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T054324.200.json
+
+###
+
+GET http://work.loc/request/dialog-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T054316.404.html
+
+###
+
+GET http://work.loc/request/dialog-message?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T054245.200.json
+
+###
+
+GET http://work.loc/request/dialog/1?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T053730.200.json
+
+###
+
+GET http://work.loc/request/dialog?expand=dialogMessages
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T053723.200.json
+
+###
+
+GET http://work.loc/request/dialog?expand=users
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T053250.200.json
+
+###
+
+GET http://work.loc/request/dialog
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T053239.200.json
+
+###
+
+GET http://work.loc/request/dialog
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"status":0}
+
+<> 2019-09-23T053235.200.json
+
+###
+
+PUT http://work.loc/request/dialog/2
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+{"status":0}
+
+<> 2019-09-23T052957.200.json
+
+###
+
+PUT http://work.loc/request/dialog/2
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052809.200.json
+
+###
+
+DELETE http://work.loc/request/dialog/2
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052711.500.json
+
+###
+
+DELETE http://work.loc/request/dialog/3
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052705.403.json
+
+###
+
+GET http://work.loc/request/dialog/1
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052647.200.json
+
+###
+
+GET http://work.loc/request/dialog
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052600.200.json
+
+###
+
+GET http://work.loc/request/dialog
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052541.200.html
+
+###
+
+GET http://work.loc/request/dialog
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052455.500.json
+
+###
+
+GET http://work.loc/request/dialog/2
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052316.200.json
+
+###
+
+GET http://work.loc/request/dialog/3
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052312.403.json
+
+###
+
+GET http://work.loc/request/dialog/3
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052115.200.json
+
+###
+
+GET http://work.loc/request/dialog/2
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052114.200.json
+
+###
+
+GET http://work.loc/request/dialog/1
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T052112.200.json
+
+###
+
+GET http://work.loc/request/dialog
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051912.200.json
+
+###
+
+GET http://work.loc/request/dialog/my-index
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051911.200.json
+
+###
+
+GET http://work.loc/request/dialog/my-index
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051753-2.404.txt
+
+###
+
+GET http://work.loc/request/dialog/my-index
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051753-1.404.txt
+
+###
+
+GET http://work.loc/request/dialog/my-index
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051753.404.txt
+
+###
+
+GET http://work.loc/request/dialog/my-index
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051751.404.txt
+
+###
+
+GET http://work.loc/request/dialog/my-index
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051749.404.txt
+
+###
+
+GET http://work.loc/request/dialog/my_index
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051745.404.txt
+
+###
+
+GET http://work.loc/request/dialog.ьн-штвуч
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051741.404.txt
+
+###
+
+GET http://work.loc/request/dialog
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer AU0kQ-bTfbpFAX8FvU7yBpkTq2QucxGv
+
+<> 2019-09-23T051732.404.txt
+
+###
+
 POST http://work.loc/request/vacancy/create?company_id=19&post=httpclient&status=1&category=1
 Accept: */*
 Cache-Control: no-cache
@@ -125,374 +511,6 @@ Content-Type: application/json
 Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
 
 <> 2019-08-06T043903.200.json
-
-###
-
-GET http://work.loc/request/resume/40?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T043316.500.json
-
-###
-
-GET http://work.loc/request/resume/my-index?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T042726.500.json
-
-###
-
-GET http://work.loc/request/resume/40?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T042711.500.json
-
-###
-
-GET http://work.loc/request/resume/40?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T041725.200.json
-
-###
-
-GET http://work.loc/request/resume/4?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T041654.404.json
-
-###
-
-GET http://work.loc/request/user/39?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T041628.404.html
-
-###
-
-GET http://work.loc/request/vacancy/2?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T040851.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T040824.200.json
-
-###
-
-GET http://work.loc/request/vacancy/my-index?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T040007.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T034613.200.json
-
-###
-
-GET http://work.loc/request/vacancy/my-index?expand=views0,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T034556.200.json
-
-###
-
-GET http://work.loc/request/vacancy/my-index?expand=company,countViews&expand=views0
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T034530.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=company,countViews&expand=views0
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T033557.200.json
-
-###
-
-GET http://work.loc/request/vacancy/my-index?expand=company,countViews&expand=views0
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T033323.200.json
-
-###
-
-GET http://work.loc/request/vacancy/my-index?expand=company,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer ybIDrMSwmOnRZKpjAKSshfWue5cabRyo
-
-<> 2019-08-06T033204.200.json
-
-###
-
-GET http://work.loc/request/vacancy/my-index?expand=company,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T033130.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=company,countViews
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T033001.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=company,views0
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032934.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=company,views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032928.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=company,views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032925.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=company,views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032845.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=company
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032803.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032743.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032639-3.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032639-2.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032639-1.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032639.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5?expand=views
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032608.200.json
-
-###
-
-GET http://work.loc/request/vacancy/5
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032542.200.json
-
-###
-
-GET http://work.loc/request/vacancy
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer JiC9yyc7PcXl5Po-pcUk-0_xDFnim1lQ
-
-<> 2019-08-06T032533.200.json
-
-###
-
-GET http://work.loc/personal_area/default/statistics
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-
-<> 2019-06-06T014115.200.html
-
-###
-
-OPTIONS http://work.loc/personal_area/default/statistics
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-
-<> 2019-06-06T014102.200.html
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013638.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013634.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013633-1.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013633.200.json
-
-###
-
-OPTIONS http://work.loc/request/employer/my-index
-Accept: application/json
-Cache-Control: no-cache
-Content-Type: application/json
-Authorization: Bearer heLv-yHzbt3aWGlogjbQLSnVhZrhWDKp
-
-<> 2019-06-06T013631.200.json
 
 ###
 

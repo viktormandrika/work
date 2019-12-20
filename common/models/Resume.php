@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use apuc\channels_webhook\behaviors\WebHookBehavior;
 use common\models\base\WorkActiveRecord;
 use Exception;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -24,7 +25,6 @@ use yii\db\ActiveRecord;
  * @property string $instagram
  * @property string $facebook
  * @property string $vk
- * @property integer $views
  * @property integer $hot
  * @property integer $notification_status
  * @property integer $status
@@ -75,6 +75,9 @@ class Resume extends WorkActiveRecord
     {
         return [
             TimestampBehavior::className(),
+            'webHook' => ['class'=>WebHookBehavior::className(),
+                'url' => 'https://webhooks.mychannels.gq/rabota/13'
+            ]
         ];
     }
     /**
@@ -83,7 +86,7 @@ class Resume extends WorkActiveRecord
     public function rules()
     {
         return [
-            [['employer_id', 'status', 'created_at', 'updated_at', 'employment_type_id', 'owner', 'update_time', 'years_of_exp', 'views', 'notification_status', 'hot'], 'integer'],
+            [['employer_id', 'status', 'created_at', 'updated_at', 'employment_type_id', 'owner', 'update_time', 'years_of_exp', 'notification_status', 'hot'], 'integer'],
             [['title', 'city', 'image_url', 'skype', 'instagram', 'facebook', 'vk'], 'string', 'max' => 255],
             [['description'], 'string'],
             [['min_salary', 'max_salary'], 'safe'],
@@ -116,7 +119,6 @@ class Resume extends WorkActiveRecord
             'instagram' => 'Instagram',
             'facebook' => 'Facebook',
             'vk' => 'VK',
-            'views' => 'Просмотры',
             'status' => 'Статус',
             'created_at' => 'Дата создания',
             'updated_at' => 'Изменено'
@@ -246,5 +248,56 @@ class Resume extends WorkActiveRecord
     public function getCountViews()
     {
         return Views::find()->where(['subject_id' => $this->id])->andWhere(['subject_type' => 'Resume'])->count();
+    }
+
+    /**
+     * @param $city City
+     * @param $category Category
+     * @return array
+     */
+    public static function getMetaData($city, $category){
+        $description = null;
+        $header = null;
+        $title = null;
+        if($city && $category){
+            $title=str_replace('{city}', $city->name, $category->meta_title_with_city);
+            $title=str_replace('{region}', $city->region->name, $title);
+            $description=str_replace('{city}', $city->name, $category->meta_description_with_city);
+            $description=str_replace('{region}', $city->region->name, $description);
+            $header=str_replace('{city}', $city->name, $category->header_with_city);
+            $header=str_replace('{region}', $city->region->name, $header);
+        }
+        if($city &&(!$title || !$description || !$header)) {
+            $title=$title?:$city->meta_title;
+            $description=$description?:$city->meta_description;
+            $header=$header?:$city->header;
+        }
+        if($category &&(!$title || !$description || !$header)) {
+            $title=$title?:$category->meta_title;
+            $description=$title?:$category->meta_description;
+            $header=$header?:$category->header;
+        }
+        $title=$title?:KeyValue::findValueByKey('resume_search_page_title')?:"Поиск Резюме";
+        $description=$description?:KeyValue::findValueByKey('resume_search_page_description')?:"Поиск Резюме";
+        $header=$header?:KeyValue::findValueByKey('resume_search_page_h1')?:"Поиск Резюме";
+        return [
+            'title' => $title,
+            'description' => $description,
+            'header' => $header
+        ];
+    }
+
+    public static function getSearchPageUrl($category_slug = false, $city_slug = false) {
+        $url = "/resume";
+        if($city_slug) {
+            $url .= "/$city_slug";
+        }
+        else if(\Yii::$app->request->cookies['city'] && $city = City::findOne(\Yii::$app->request->cookies['city'])) {
+            $url .= "/$city->slug";
+        }
+        if($category_slug) {
+            $url .= "/$category_slug";
+        }
+        return $url;
     }
 }

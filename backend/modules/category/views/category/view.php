@@ -31,6 +31,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
+            [
+                'attribute'=>'image',
+                'format'=>'html',
+                'value' => function($model){
+                    return Html::img($model->image, ['height'=>'300px']);
+                }
+            ],
+            'slug',
+            'meta_title',
+            'meta_description',
+            'header',
+            'meta_title_with_city',
+            'meta_description_with_city',
+            'header_with_city',
         ],
     ]) ?>
 

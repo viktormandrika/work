@@ -16,6 +16,8 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\HttpException;
+use yii\web\UrlManager;
 
 /**
  * Default controller for the `resume` module
@@ -24,19 +26,26 @@ class DefaultController extends Controller
 {
     public $layout = '@frontend/views/layouts/main-layout.php';
 
+    public $background_image;
+    public $background_emblem;
+
     public function actionView($id)
     {
         $model = Resume::findOne($id);
+        if(!$model)
+            throw new HttpException(404, 'Not found');
+        $referer_category = false;
+        if(Yii::$app->request->get('referer_category'))
+            $referer_category = Category::findOne(Yii::$app->request->get('referer_category'));
         $view = new Views();
         $view->subject_type = 'Resume';
         $view->subject_id = $model->id;
         $view->viewer_id = Yii::$app->user->id;
-        $view->dt_view = strtotime(date("Y-m-d H:i:s"));
+        $view->dt_view = time();
         $view->save();
-        $model->views++;
-        $model->save();
         return $this->render('view', [
-            'model' => $model
+            'model' => $model,
+            'referer_category' => $referer_category
         ]);
     }
 
@@ -75,22 +84,50 @@ class DefaultController extends Controller
             'tags_id' => json_decode(\Yii::$app->request->get('tags_id')),
             'min_salary' => Yii::$app->request->get('min_salary'),
             'max_salary' => Yii::$app->request->get('max_salary'),
-            'search_text' => Yii::$app->request->get('search_text'),
-            'city' => Yii::$app->request->get('city'),
+            'search_text' => Yii::$app->request->get('search_text')
         ];
-        $exploded_string=explode(':',$params['search_text']);
-        if(count($exploded_string)===2){
-            if($exploded_string[0]==='город'){
-                $params['city']=$exploded_string[1];
-                $params['search_text']='';
+        $first_query_param = Yii::$app->request->get('first_query_param');
+        $second_query_param = Yii::$app->request->get('second_query_param');
+        $current_category = false;
+        $current_city = false;
+        if($second_query_param) {
+            if($current_city = City::findOne(['slug'=>$first_query_param])) {
+                $this->background_image = $current_city->image;
+            }
+            if($current_category = Category::findOne(['slug'=>$second_query_param])) {
+                $this->background_emblem = $current_category->image;
+                $params['category_ids']=[$current_category->id];
+            }
+        } else if ($first_query_param) {
+            if($current_city = City::findOne(['slug'=>$first_query_param])) {
+                $this->background_image = $current_city->image;
+            } else if ($current_category = Category::findOne(['slug'=>$first_query_param])) {
+                $this->background_emblem = $current_category->image;
+                $params['category_ids']=[$current_category->id];
             }
         }
+        if(!$current_city && Yii::$app->request->get('city_disable')!=1)
+            $current_city = City::findOne(Yii::$app->request->cookies['city']);
         $tags = Skill::find()->all();
         $categories = Category::find()->all();
         $employment_types = EmploymentType::find()->all();
         $cities = City::find()->where(['status' => 1])->all();
 
-        $resume_query = Resume::find()->with(['employer', 'employment_type'])->where([Resume::tableName().'.status' => Resume::STATUS_ACTIVE])->groupBy('id')->orderBy('id DESC');
+        $resume_query = Resume::find()
+            ->with(['employer', 'employment_type'])
+            ->joinWith(['category', 'skills', 'employment_type'])
+            ->where([Resume::tableName().'.status' => Resume::STATUS_ACTIVE])
+            ->groupBy('id')
+            ->orderBy('id DESC')
+            ->andFilterWhere([
+                'category.id' => $params['category_ids'],
+                'skill.id' => $params['tags_id'],
+                'employment_type.id' => $params['employment_type_ids']
+            ]);
+        $resume_query->andFilterWhere(['>=', 'max_salary', $params['min_salary']]);
+        $resume_query->andFilterWhere(['<=', 'min_salary', $params['max_salary']]);
+        if($current_city)
+            $resume_query->andFilterWhere(['like', 'city', $current_city->name]);
         if($params['search_text']){
             if($params['search_text'][0]===':')
             {
@@ -114,24 +151,6 @@ class DefaultController extends Controller
                 $resume_query->andWhere($or);
             }
         }
-        if($params['category_ids']) {
-            $resume_query->joinWith(['category']);
-            $resume_query->andWhere(['category.id' => $params['category_ids']]);
-        }
-        if($params['tags_id']) {
-            $resume_query->joinWith(['skills']);
-            $resume_query->andWhere(['skill.id' => $params['tags_id']]);
-        }
-        if($params['employment_type_ids']) {
-            $resume_query->joinWith(['employment_type']);
-            $resume_query->andWhere(['employment_type.id' => $params['employment_type_ids']]);
-        }
-        if($params['min_salary']){
-            $resume_query->andWhere(['>=', 'max_salary', $params['min_salary']]);
-        }
-        if($params['max_salary']){
-            $resume_query->andWhere(['<=', 'min_salary', $params['max_salary']]);
-        }
         if($params['search_text'] && $params['search_text'][0]!=':'){
             $resume_query->joinWith(['skills', 'experience', 'education']);
             $resume_query->andWhere(['or',
@@ -148,14 +167,14 @@ class DefaultController extends Controller
                 ['like', 'education.specialization', $params['search_text']],
             ]);
         }
-        if($params['city']){
-            $resume_query->andWhere(['like', 'city', $params['city']]);
-        }
-
+        $get = $_GET;
+        unset($get['first_query_param'], $get['second_query_param']);
         $resumes = new ActiveDataProvider([
             'query' => $resume_query,
             'pagination' => [
-                'pageSize' => 10
+                'defaultPageSize' => 10,
+                'params' => $get,
+                'route' => Yii::$app->request->getPathInfo()
             ]
         ]);
 
@@ -171,8 +190,9 @@ class DefaultController extends Controller
             'employment_type_ids' => $params['employment_type_ids'],
             'experience_ids' => $params['experience_ids'],
             'search_text' => $params['search_text'],
-            'city' => $params['city'],
+            'city' => $current_city,
             'tags_id' => $params['tags_id'],
+            'current_category' => $current_category,
         ]);
     }
 }

@@ -61,9 +61,12 @@ return [
         'views' => [
             'class' => 'backend\modules\views\Views',
         ],
+        'test' => [
+            'class' => 'apuc\channels_webhook\modules\test\Test',
+        ],
         'user' => [
             'class'  => 'dektrium\user\Module',
-            'admins' => ['test', 'millenion94@gmail.com', 'kirill.bouko@gmail.com'],
+            'admins' => ['test', 'millenion94@gmail.com', 'kirill.bouko@gmail.com', 'test@test.test'],
             'as backend' => 'dektrium\user\filters\BackendFilter',
         ],
     ],
@@ -116,7 +119,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-
+                'user/admin/update' => 'site/users'
             ],
         ],
     ],

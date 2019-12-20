@@ -6,6 +6,7 @@ use common\classes\Debug;
 use common\models\Category;
 use common\models\Employer;
 use common\models\Vacancy;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 /**
@@ -27,16 +28,19 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionSearch()
+    public function actionSelectCity()
     {
-        if(\Yii::$app->request->post('search_type') === 'vacancy'){
-            return $this->redirect('/vacancy/search/'.\Yii::$app->request->post('search_text'));
-        }
-        else if(\Yii::$app->request->post('search_type') === 'resume'){
-            return $this->redirect('/resume/search/'.\Yii::$app->request->post('search_text'));
-        }
-        else{
-            return $this->redirect ('/');
-        }
+        $value = \Yii::$app->request->post('city');
+        \Yii::$app->response->cookies->add(new \yii\web\Cookie([
+            'name' => 'city',
+            'value' => $value
+        ]));
+        return $value;
+    }
+
+    public function actionCity()
+    {
+        $this->layout = '@frontend/views/layouts/main-layout.php';
+        return $this->render('cities');
     }
 }

@@ -1,13 +1,24 @@
 <?php
 /* @var $this yii\web\View */
 /* @var $model \common\models\Resume */
+/* @var $referer_category \common\models\Category */
+
+use common\classes\MoneyFormat;
+use common\models\City;
+use common\models\Experience;
+use common\models\Resume;
+use yii\helpers\StringHelper;
+use yii\helpers\Url;
 
 $this->title = $model->title;
+$this->registerMetaTag(['name'=>'description', 'content' => StringHelper::truncate($model->description, 100, '...')]);
+$this->registerMetaTag(['name'=>'og:title', 'content' => $model->title]);
+$this->registerMetaTag(['name'=>'og:type', 'content' => 'website']);
+$this->registerMetaTag(['name'=>'og:url', 'content' => Yii::$app->urlManager->hostInfo]);
+$this->registerMetaTag(['name'=>'og:image', 'content' => $model->image_url?:'/images/empty_user.jpg']);
+$this->registerMetaTag(['name'=>'og:description', 'content' => StringHelper::truncate($model->description, 100, '...')]);
 
-use common\models\Experience;
-use yii\helpers\Html;
-use yii\helpers\Url; ?>
-
+?>
 
 <div class="resume"><img class="resume__dots2" src="/images/bg-dots.png" alt="" role="presentation"/>
     <div class="resume__circle">
@@ -19,11 +30,15 @@ use yii\helpers\Url; ?>
             </button>
             <div class="resume-results">
                 <ul class="breadcrumbs">
-                    <li><a href="<?=Url::to('/resume/search')?>">К результатам поиска</a>
-                    </li>
-                    <?php if($model->city):?>
-                    <li><a href="<?=Url::to(["/resume/search/город:$model->city"])?>"><?= $model->city ?></a>
-                    </li>
+                    <?php if($model->city && $city = City::findOne(['name'=>$model->city])):?>
+                        <li>
+                            <a href="<?=Resume::getSearchPageUrl(false, $city->slug)?>"><?= $model->city ?></a>
+                        </li>
+                    <?php endif?>
+                    <?php if($referer_category):?>
+                        <li>
+                            <a href="<?=Resume::getSearchPageUrl($referer_category->slug)?>"><?= $referer_category->name ?></a>
+                        </li>
                     <?php endif?>
                     <li><?= $model->title ?></li>
                 </ul>
@@ -32,7 +47,7 @@ use yii\helpers\Url; ?>
                     </p><span><?= Yii::$app->formatter->asDate($model->update_time, 'dd MM yyyy') ?></span>
                 </div>
             </div>
-            <section class="resume-top"><img class="resume-top__left" src="<?=$model->image_url?$model->image_url:'/images/empty_user.jpg'?>" alt=""
+            <section class="resume-top"><img class="resume-top__left" src="<?=$model->image_url?:'/images/empty_user.jpg'?>" alt=""
                                          role="presentation"/>
                 <div class="resume-top__right">
 <!--                    <div class="resume-top__header">-->
@@ -51,11 +66,11 @@ use yii\helpers\Url; ?>
                     </p>
                     <span class="resume-top__price">
                         <?php if($model->min_salary>0 && $model->max_salary>0):?>
-                            <?= (int)$model->min_salary ?>-<?= (int)$model->max_salary ?> RUB
+                            <?= MoneyFormat::getFormattedAmount($model->min_salary)?>-<?= MoneyFormat::getFormattedAmount($model->max_salary)?> RUB
                         <?php elseif($model->max_salary>0):?>
-                            До <?= (int)$model->max_salary ?> RUB
+                            До <?= MoneyFormat::getFormattedAmount($model->max_salary)?> RUB
                         <?php elseif($model->min_salary>0):?>
-                            От <?= (int)$model->min_salary ?> RUB
+                            От <?= MoneyFormat::getFormattedAmount($model->min_salary)?> RUB
                         <?php else:?>
                             По договоренности
                         <?php endif?>
@@ -92,73 +107,77 @@ use yii\helpers\Url; ?>
             </section>
             <div class="resume-block single-block-slider">
                 <section class="resume-description">
+                    <?php if($model->experience):?>
                     <div class="resume-description__item">
-                        <div class="resume-description__main-head">
-                            <h4 class="resume-description__title-main">Опыт работы
-                            </h4><span
-                                    class="resume-description__experience"><?= Experience::getPeriod_string(Experience::getPeriod_sum($model->experience)) ?></span>
+                            <div class="resume-description__main-head">
+                                <h4 class="resume-description__title-main">Опыт работы</h4>
+                                <span class="resume-description__experience"><?= Experience::getPeriod_string(Experience::getPeriod_sum($model->experience)) ?></span>
+                            </div>
+                            <?php foreach ($model->experience as $experience): ?>
+                                <h4 class="resume-description__title-bold"><?= $experience->name ?>
+                                </h4>
+                                <p class="resume-description__text">
+                                    с <?= $experience->month_from >= 10 ? $experience->month_from : ('0' . $experience->month_from) ?>
+                                    .<?= $experience->year_from ?>
+                                    по
+                                    <?= $experience->month_to >= 10 ? $experience->month_to : ('0' . $experience->month_to) ?>
+                                    .<?= $experience->year_to ?>
+                                    (<?= Experience::getPeriod_string($experience->getPeriod()) ?>)
+                                </p>
+                                <p class="resume-description__text">
+                                    <?= $experience->post ?>
+                                </p>
+                                <p class="resume-description__text">
+                                    <?= $experience->responsibility ?>
+                                </p>
+                            <?php endforeach; ?>
+                    </div>
+                    <?php endif?>
+                    <?php if($model->education):?>
+                        <div class="resume-description__item">
+                            <h4 class="resume-description__title-main">Образование
+                            </h4>
+                            <?php foreach ($model->education as $education): ?>
+                                <h4 class="resume-description__title-bold">
+                                    <?= $education->name ?>
+                                </h4>
+                                <p class="resume-description__text"><?= $education->academic_degree ?><?php if($education->year_from || $education->year_to):?>,<?php endif?>
+                                    <br>
+                                    <?php if($education->year_from):?>
+                                    с <?= $education->year_from ?>
+                                    <?php endif ?>
+                                    <?php if($education->year_to):?>
+                                    по
+                                    <?= $education->year_to ?>
+                                    <?php endif?>
+                                    <?php if($education->year_from || $education->year_to):?>
+                                    г.
+                                    <?php endif?>
+                                </p>
+                            <?php endforeach; ?>
                         </div>
-                        <?php foreach ($model->experience as $experience): ?>
-                            <h4 class="resume-description__title-bold"><?= $experience->name ?>
-                            </h4>
-                            <p class="resume-description__text">
-                                с <?= $experience->month_from >= 10 ? $experience->month_from : ('0' . $experience->month_from) ?>
-                                .<?= $experience->year_from ?>
-                                по
-                                <?= $experience->month_to >= 10 ? $experience->month_to : ('0' . $experience->month_to) ?>
-                                .<?= $experience->year_to ?>
-                                (<?= Experience::getPeriod_string($experience->getPeriod()) ?>)
-                            </p>
-                            <p class="resume-description__text">
-                                <?= $experience->post ?>
-                            </p>
-                            <p class="resume-description__text">
-                                <?= $experience->responsibility ?>
-                            </p>
-                        <?php endforeach; ?>
-                    </div>
-                    <div class="resume-description__item">
-                        <h4 class="resume-description__title-main">Образование
-                        </h4>
-                        <?php foreach ($model->education as $education): ?>
-                            <h4 class="resume-description__title-bold">
-                                <?= $education->name ?>
-                            </h4>
-                            <p class="resume-description__text"><?= $education->academic_degree ?><?php if($education->year_from || $education->year_to):?>,<?php endif?>
-                                <br>
-                                <?php if($education->year_from):?>
-                                с <?= $education->year_from ?>
-                                <?php endif ?>
-                                <?php if($education->year_to):?>
-                                по
-                                <?= $education->year_to ?>
-                                <?php endif?>
-                                <?php if($education->year_from || $education->year_to):?>
-                                г.
-                                <?php endif?>
-                            </p>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php if($model->skills):?>
-                    <div class="resume-description__item">
-                        <h4 class="resume-description__title-main">Профессиональные и другие навыки
-                        </h4>
-                        <p class="resume-description__text">
-
-                            <?php
-                            $i=true;
-                            foreach ($model->skills as $skill) {
-                                if($i){
-                                    echo $skill->name;
-                                    $i=false;
-                                } else {
-                                    echo ', '.$skill->name;
-                                }
-                            }
-                            ?>.
-                        </p>
-                    </div>
                     <?php endif ?>
+                    <?php if($model->skills):?>
+                        <div class="resume-description__item">
+                            <h4 class="resume-description__title-main">Профессиональные и другие навыки
+                            </h4>
+                            <p class="resume-description__text">
+
+                                <?php
+                                $i=true;
+                                foreach ($model->skills as $skill) {
+                                    if($i){
+                                        echo $skill->name;
+                                        $i=false;
+                                    } else {
+                                        echo ', '.$skill->name;
+                                    }
+                                }
+                                ?>.
+                            </p>
+                        </div>
+                    <?php endif ?>
+                    <?php if($model->description): ?>
                     <div class="resume-description__item">
                         <h4 class="resume-description__title-main">Дополнительная информация
                         </h4>
@@ -166,6 +185,7 @@ use yii\helpers\Url; ?>
                             <?= nl2br($model->description) ?>
                         </p>
                     </div>
+                    <?php endif ?>
                 </section>
                 <aside class="resume-info jsOpenContacts" id="sidebar-single">
                     <div class="single-vacancy-overlay jsHideContacts"></div>

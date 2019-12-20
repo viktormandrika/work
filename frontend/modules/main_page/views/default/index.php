@@ -7,13 +7,20 @@
 
 
 use common\models\KeyValue;
+use common\models\Resume;
 use common\models\Vacancy;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;
 use yii\helpers\Url;
 
 $this->title = KeyValue::findValueByKey('main_page_title') ?: 'Работа: главная';
 $this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueByKey('main_page_description')]);
+$this->registerMetaTag(['name'=>'og:title', 'content' => $this->title]);
+$this->registerMetaTag(['name'=>'og:type', 'content' => 'website']);
+$this->registerMetaTag(['name'=>'og:url', 'content' => Yii::$app->urlManager->hostInfo]);
+$this->registerMetaTag(['name'=>'og:image', 'content' => Yii::$app->urlManager->hostInfo.'/images/logo-main.png']);
+$this->registerMetaTag(['name'=>'og:description', 'content' => KeyValue::findValueByKey('main_page_description')]);
 ?>
 
 <div class="nhome">
@@ -41,8 +48,21 @@ $this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueB
                         <img src="/images/logo-main.png" alt="" role="presentation"/>
                         <img src="/images/logo_mob.png" alt="" role="presentation"/>
                     </a>
-                    <a class="nhome__nav-item" href="<?=Url::to(['/resume/default/search'])?>">Поиск резюме</a>
-                    <a class="nhome__nav-item" href="<?=Url::to(['/vacancy/default/search'])?>">Поиск вакансий</a>
+                    <?=''
+//                    \kartik\select2\Select2::widget(
+//                        [
+//                            'name' => 'CitySelect',
+//                            'value' => Yii::$app->request->cookies['city'],
+//                            'data' => ArrayHelper::map(\common\models\City::find()->all(), 'id', 'name'),
+//                            'options' => ['placeholder' => 'Выберите город', 'id'=>'city_select'],
+//                            'pluginOptions' => [
+//                                'allowClear' => true
+//                            ],
+//                        ]
+                    //);
+?>
+                    <a class="nhome__nav-item" href="<?=Resume::getSearchPageUrl()?>">Поиск резюме</a>
+                    <a class="nhome__nav-item" href="<?=Vacancy::getSearchPageUrl()?>">Поиск вакансий</a>
                     <?php if (Yii::$app->user->isGuest): ?>
                     <button class="nhome__nav-item nav-btn jsLogin">
                         Вход
@@ -61,7 +81,7 @@ $this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueB
                         <div class="dropdown__menu jsShowMenu">
                             <span class="nhome__nav-item mobile-prev jsMenuPrev">Назад</span>
                             <?php $messages=Yii::$app->user->identity->unreadMessages ?>
-                            <a class="nhome__nav-item" href="<?=Url::to(['/personal_area/default/index'])?>">Личный кабинект</a>
+                            <a class="nhome__nav-item" href="<?=Url::to(['/personal_area/default/index'])?>">Личный кабинет</a>
                             <a class="nhome__nav-item" href="<?=Url::to(['/personal-area/my-message'])?>">Сообщения <?=$messages>0?"($messages)":""?></a>
                             <?= Html::beginForm(['/user/security/logout'], 'post', ['class' => 'form-logout']) ?>
                             <?= Html::submitButton(
@@ -75,19 +95,13 @@ $this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueB
                 </nav>
             </div>
             <div class="nhome__main-content">
-                <?= Html::beginForm(['/main_page/default/search'], 'post', ['class' => 'nhome__form']) ?>
+                <?= Html::beginForm([Vacancy::getSearchPageUrl()], 'get', ['class' => 'nhome__form']) ?>
                     <span class="nhome__form-text">
                         Сейчас на сайте свыше
-                        <a href="<?=Url::to(['/vacancy/default/search'])?>" class='white-text'> <?=Vacancy::find()->count()?> вакансий </a> и
-                        <a href="<?=Url::to(['/resume/default/search'])?>" class='white-text'> <?=\common\models\Resume::find()->count()?> резюме</a>
+                        <a href="<?=Vacancy::getSearchPageUrl()?>" class='white-text'> <?=Vacancy::find()->count()?> вакансий </a> и
+                        <a href="<?=Resume::getSearchPageUrl()?>" class='white-text'> <?=Resume::find()->count()?> резюме</a>
                     </span>
-                    <input name="search_text" class="nhome__form-input" placeholder="Я ищу..." type="text"/>
-                    <div class="nhome__form-select">
-                        <select name="search_type" class="home__form-select-js">
-                            <option value="vacancy">Работу</option>
-                            <option value="resume">Сотрудников</option>
-                        </select>
-                    </div>
+                <input name="search_text" class="nhome__form-input" placeholder="Я ищу..." type="text"/>
                 <?= Html::submitButton(
                     '<i class="fa fa-search"></i>',
                     ['class' => 'nhome__search btn-red']
@@ -127,17 +141,21 @@ $this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueB
                     <div class="single-card__top">
                         <div class="single-card__cat-city">
                             <?php if($vacancy->category):?>
-                            <a class="btn-card btn-card-small btn-gray" href="<?=Url::to(['/vacancy/default/search', 'category_ids' => json_encode([$vacancy->category[0]->id])])?>"><?=$vacancy->category[0]->name?></a>
+                            <?php $category_slug = $vacancy->category[0]->slug ?>
+                            <a class="btn-card btn-card-small btn-gray" href="<?=Url::to(["/vacancy/$category_slug"])?>"><?=$vacancy->category[0]->name?></a>
                             <?php endif ?>
-                            <a class="d-flex align-items-center" href="<?=Url::to(['/vacancy/default/search', 'city' => $vacancy->city])?>">
+                            <?php $city = \common\models\City::findOne(['name'=>$vacancy->city])?>
+                            <?php if($city): ?>
+                            <a class="d-flex align-items-center" href="<?=Url::to(["/vacancy/$city->slug"])?>">
                                 <img class="single-card__icon" src="/images/arr-place.png" alt="" role="presentation"/>
                                 <span class="ml5"><?=$vacancy->city?></span>
                             </a>
+                            <?php endif ?>
                         </div>
                         <a href="<?=Url::to(['/vacancy/default/view', 'id'=>$vacancy->id])?>" class="single-card__title" title="<?=$vacancy->post?>"><?=$vacancy->post?></a>
                         <div class="single-card__info-second"><span class="mr10">Добавлено: <?= Yii::$app->formatter->asTime($vacancy->created_at, 'dd MM yyyy, hh:mm') ?></span>
                             <div class="single-card__view"><img class="single-card__icon mr5" src="/images/icon-eye.png"
-                                                                alt="" role="presentation"/><span><?=$vacancy->views?></span>
+                                                                alt="" role="presentation"/><span><?=$vacancy->countViews?></span>
                             </div>
                         </div>
                     </div>
@@ -165,9 +183,9 @@ $this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueB
     $i=0;
     foreach($categories as $category): ?>
     <?php if($i<9): ?>
-        <a class="nhome__footer-item" href="<?=Url::to(['/vacancy/default/search', 'category_ids' => json_encode([$category->id])])?>"><?=$category->name?> <?=$category->getVacancyCategories()->count()?></a>
+        <a class="nhome__footer-item" href="<?=Url::toRoute(['/vacancy/'.$category->slug])?>"><?=$category->name?> <?=$category->getVacancyCategories()->count()?></a>
     <?php else:?>
-        <a class="nhome__footer-item mob-hide" href="<?=Url::to(['/vacancy/default/search', 'category_ids' => json_encode([$category->id])])?>"><?=$category->name?> <?=$category->getVacancyCategories()->count()?></a>
+        <a class="nhome__footer-item mob-hide" href="<?=Url::toRoute(['/vacancy/'.$category->slug])?>"><?=$category->name?> <?=$category->getVacancyCategories()->count()?></a>
     <?php
     endif;
     $i++;

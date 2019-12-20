@@ -5,12 +5,14 @@
 /* @var $tags \common\models\Skill[] */
 /* @var $resumes \yii\data\ActiveDataProvider */
 /* @var $employment_types \common\models\EmploymentType[] */
-/* @var $city string */
+/* @var $city \common\models\City */
 /* @var $search_text string */
 /* @var $experience_ids array */
+/* @var $current_category Category|null */
 
 /* @var $cities \common\models\City[] */
 
+use common\classes\MoneyFormat;
 use common\models\Category;
 use common\models\Experience;
 use common\models\KeyValue;
@@ -20,22 +22,21 @@ use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\LinkPager;
 
-$city_model=\common\models\City::find()->where(['name'=>$city])->one();
-if($city_model && $search_text){
-    $this->title="Соискатели в $city_model->prepositional: $search_text";
-} else if($city_model) {
-    $this->title="Соискатели в $city_model->prepositional";
-} else if($search_text) {
-    $this->title="Поиск соискателей: $search_text";
-} else {
-    $this->title=KeyValue::findValueByKey('resume_search_page_title')?:"Поиск соискателей";
-}
-$this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueByKey('resume_search_page_description')]);
+$meta_data = Resume::getMetaData($city, $current_category);
+$this->title = $meta_data['title'];
+$this->registerMetaTag(['name'=>'description', 'content' => $meta_data['description']]);
+$this->registerMetaTag(['name'=>'og:title', 'content' => $meta_data['title']]);
+$this->registerMetaTag(['name'=>'og:type', 'content' => 'website']);
+$this->registerMetaTag(['name'=>'og:url', 'content' => Yii::$app->urlManager->hostInfo]);
+$this->registerMetaTag(['name'=>'og:image', 'content' => Yii::$app->urlManager->hostInfo.'/images/logo-main.png']);
+$this->registerMetaTag(['name'=>'og:description', 'content' => $meta_data['description']]);
+
 $this->registerJsFile(Yii::$app->request->baseUrl . '/js/resume_search.js', ['depends' => [MainAsset::className()]]);
 ?>
 
-<section class="all-block all-resume"><img class="all-block__dots2" src="/images/bg-dots.png" alt=""
-                                           role="presentation"/>
+<section class="all-block all-resume">
+    <h1 class="hide"><?=$meta_data['header']?></h1>
+    <img class="all-block__dots2" src="/images/bg-dots.png" alt="" role="presentation"/>
     <div class="all-block__circle">
     </div>
     <div class="all-block__content">
@@ -80,8 +81,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/resume_search.js', ['de
                         <div class="vl-block">
                             <select class="vl-block__cities jsCitiesSelect">
                                 <option></option>
+                                <?php $city_id = $city?$city->id:null;?>
                                 <?php foreach ($cities as $sel_city): ?>
-                                    <option <?= $sel_city->name == $city ? 'selected' : '' ?>><?= $sel_city->name ?></option>
+                                    <option <?= $sel_city->id == $city_id ? 'selected' : '' ?> value="<?=$sel_city->slug?>"><?= $sel_city->name ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -145,7 +147,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/resume_search.js', ['de
                                             <?php if (isset($category_ids) && $category_ids !== []): ?>
                                                 <?= in_array($category->id, $category_ids) ? 'checked' : '' ?>
                                             <?php endif ?>
-                                               name="category" data-id="<?= $category->id ?>"/>
+                                               name="category" data-slug="<?=$category->slug?>" data-id="<?= $category->id ?>"/>
                                         <div class="checkbox__text"><?= $category->name ?></div>
                                     </label>
                                 <?php endforeach ?>
@@ -190,22 +192,29 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/resume_search.js', ['de
                     if ($resumes->models):
                         foreach ($resumes->models as $resume):?>
                             <div class="single-card-resume">
-                                <div class="single-card-resume__top"><img class="single-card-resume__left-img"
-                                                                          src="<?=$resume->image_url?$resume->image_url:'/images/empty_user.jpg'?>" alt=""
-                                                                          role="presentation"/>
+                                <div class="single-card-resume__top">
+                                    <img class="single-card-resume__left-img" src="<?=$resume->image_url?$resume->image_url:'/images/empty_user.jpg'?>" alt="" role="presentation"/>
                                     <div class="single-card-resume__top-left">
                                         <div class="single-card-resume__head">
-                                            <h3><a href="<?=Url::toRoute(['/resume/default/view', 'id'=>$resume->id])?>"><?= $resume->title ?></a></h3>
-                                            <!--                                    <p class="single-card-resume__status vr-head">Онлайн-->
-                                            <!--                                    </p>-->
+                                            <h3>
+                                                <?php if($category_ids && count($category_ids) === 1):?>
+                                                <a href="<?=Url::toRoute(['/resume/default/view', 'id'=>$resume->id, 'referer_category'=>$category_ids[0]])?>">
+                                                    <?= $resume->title ?>
+                                                </a>
+                                                <?php else: ?>
+                                                <a href="<?=Url::toRoute(['/resume/default/view', 'id'=>$resume->id])?>">
+                                                    <?= $resume->title ?>
+                                                </a>
+                                                <?php endif ?>
+                                            </h3>
                                         </div>
                                         <span class="single-card-resume__price">
                                             <?php if($resume->min_salary>0 && $resume->max_salary>0):?>
-                                            <?= (int)$resume->min_salary ?>-<?= (int)$resume->max_salary ?> RUB
+                                            <?= MoneyFormat::getFormattedAmount($resume->min_salary) ?> - <?= MoneyFormat::getFormattedAmount($resume->max_salary) ?> RUB
                                             <?php elseif($resume->max_salary>0):?>
-                                            До <?= (int)$resume->max_salary ?> RUB
+                                            До <?= MoneyFormat::getFormattedAmount($resume->max_salary) ?> RUB
                                             <?php elseif($resume->min_salary>0):?>
-                                            От <?= (int)$resume->min_salary ?> RUB
+                                            От <?= MoneyFormat::getFormattedAmount($resume->min_salary) ?> RUB
                                             <?php else:?>
                                             По договоренности
                                             <?php endif?>

@@ -11,10 +11,17 @@ use Yii;
  * @property int $id
  * @property string $name
  * @property string $prepositional
+ * @property string $image
  * @property string $region_id
  * @property string $latitude
  * @property string $longitude
  * @property string $status
+ * @property string $slug
+ * @property string $meta_title
+ * @property string $meta_description
+ * @property string $header
+ *
+ * @property Region $region
  *
  */
 class City extends WorkActiveRecord
@@ -36,7 +43,9 @@ class City extends WorkActiveRecord
     public function rules()
     {
         return [
-            [['name', 'prepositional'], 'string', 'max' => 50],
+            [['name'], 'string', 'max' => 50],
+            [['prepositional', 'image', 'slug', 'meta_title', 'header'], 'string', 'max' => 255],
+            [['meta_description'], 'string'],
             [['region_id', 'status'], 'integer'],
             [['latitude', 'longitude'], 'safe'],
         ];
@@ -45,10 +54,22 @@ class City extends WorkActiveRecord
     public function attributeLabels()
     {
         return [
-          'latitude' => 'Широта',
+            'latitude' => 'Широта',
             'longitude' => 'Долгота',
             'region_id' => 'Область',
+            'image' => 'Фотография',
+            'slug' => 'Slug',
+            'meta_title' => 'Meta title',
+            'meta_description' => 'Meta description',
+            'header' => 'h1 заголовок',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if($insert)
+            $this->slug = \common\classes\LocoTranslitFilter::cyrillicToLatin($this->name, 100, true);
+        return parent::beforeSave($insert);
     }
 
     public static function getStatusList()

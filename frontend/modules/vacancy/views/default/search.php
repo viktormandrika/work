@@ -11,11 +11,13 @@
 /* @var $min_salary int */
 /* @var $max_salary int */
 /* @var $search_text string */
-/* @var $city string */
+/* @var $city \common\models\City */
+/* @var $current_category Category|null */
 
 /* @var $employment_types EmploymentType[] */
 /* @var $cities City[] */
 
+use common\classes\MoneyFormat;
 use common\models\Category;
 use common\models\EmploymentType;
 use common\models\KeyValue;
@@ -26,47 +28,41 @@ use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\LinkPager;
 
-$city_model=\common\models\City::find()->where(['name'=>$city])->one();
-if($city_model && $search_text){
-    $this->title="Работа в $city_model->prepositional: $search_text";
-} else if($city_model) {
-    $this->title="Работа в $city_model->prepositional";
-} else if($search_text) {
-    $this->title="Поиск работы: $search_text";
-} else {
-    $this->title=KeyValue::findValueByKey('vacancy_search_page_title')?:"Поиск Вакансий";
-}
-
-$this->registerMetaTag(['name'=>'description', 'content' => KeyValue::findValueByKey('vacancy_search_page_description')]);
+$meta_data = Vacancy::getMetaData($city, $current_category);
+$this->title = $meta_data['title'];
+$this->registerMetaTag(['name'=>'description', 'content' => $meta_data['description']]);
+$this->registerMetaTag(['name'=>'og:title', 'content' => $this->title]);
+$this->registerMetaTag(['name'=>'og:type', 'content' => 'website']);
+$this->registerMetaTag(['name'=>'og:url', 'content' => Yii::$app->urlManager->hostInfo]);
+$this->registerMetaTag(['name'=>'og:image', 'content' => Yii::$app->urlManager->hostInfo.'/images/logo-main.png']);
+$this->registerMetaTag(['name'=>'og:description', 'content' => $meta_data['description']]);
 
 $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['depends' => [MainAsset::className()]]);
 ?>
-<section class="all-block all-vacancies"><img class="all-block__dots2" src="/images/bg-dots.png" alt=""
-                                    role="presentation"/>
+<section class="all-block all-vacancies">
+    <h1 class="hide"><?=$meta_data['header']?></h1>
+    <img class="all-block__dots2" src="/images/bg-dots.png" alt="" role="presentation"/>
     <div class="all-block__circle">
     </div>
     <div class="all-block__content">
-        <button class="filter-btn jsShowFilter">Фильтр
-        </button>
+        <button class="filter-btn jsShowFilter">Фильтр</button>
         <div class="container">
             <div class="v-content-top">
                 <div class="home__aside-header">
                     <div class="logo">
-                        <div class="logo__img"><img class="logo__main" src="/images/logo.png" alt=""
-                                                    role="presentation"/><img class="logo__info"
-                                                                              src="/images/ico-i.png" alt=""
-                                                                              role="presentation"/>
+                        <div class="logo__img">
+                            <img class="logo__main" src="/images/logo.png" alt="" role="presentation"/>
+                            <img class="logo__info" src="/images/ico-i.png" alt="" role="presentation"/>
                         </div>
                         <span class="logo__text">Актуальных вакансий сейчас</span>
                     </div>
-									<div class="search">
-										<input type="text" name="vacancy_search_text" placeholder="Поиск" value="<?=$search_text?>"/>
-										<button class="btn-red" id="search">
-											<i class="fa fa-search"></i>
-										</button>
-									</div>
+                    <div class="search">
+                        <input type="text" name="vacancy_search_text" placeholder="Поиск" value="<?=$search_text?>"/>
+                        <button class="btn-red" id="search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
                 </div>
-
             </div>
             <div class="v-content-bottom container-for-sidebar">
                 <div class="filter-overlay jsFilterOverlay">
@@ -90,8 +86,9 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['d
                         <div class="vl-block">
                             <select class="vl-block__cities jsCitiesSelect">
                                 <option></option>
+                                <?php $city_id = $city?$city->id:null;?>
                                 <?php foreach($cities as $sel_city):?>
-                                <option <?=$sel_city->name == $city?'selected':''?>><?=$sel_city->name?></option>
+                                <option <?=$sel_city->id == $city_id?'selected':''?> value="<?=$sel_city->slug?>"><?=$sel_city->name?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -141,8 +138,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['d
                         </div>
                         <div class="vl-block">
                             <div class="vl-block__head jsOpenCheck">
-                                <p>Категория
-                                </p><span class="jsBtnPlus btn-active">+</span><span class="jsBtnMinus">-</span>
+                                <p>Категория</p><span class="jsBtnPlus btn-active">+</span><span class="jsBtnMinus">-</span>
                             </div>
                             <div class="vl-block__check jsCheckBlock">
                                 <?php foreach ($categories as $category): ?>
@@ -151,7 +147,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['d
                                             <?php if(isset($category_ids) && $category_ids !== []): ?>
                                             <?=in_array($category->id, $category_ids)?'checked':''?>
                                             <?php endif ?>
-                                               name="category" data-id="<?=$category->id?>"/>
+                                            name="category" data-slug="<?=$category->slug?>" data-id="<?=$category->id?>"/>
                                         <div class="checkbox__text"><?= $category->name ?></div>
                                     </label>
                                 <?php endforeach ?>
@@ -159,8 +155,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['d
                         </div>
                         <div class="vl-block">
                             <div class="vl-block__head jsOpenCheck">
-                                <p>Вид занятости
-                                </p><span class="jsBtnPlus btn-active">+</span><span class="jsBtnMinus">-</span>
+                                <p>Вид занятости</p><span class="jsBtnPlus btn-active">+</span><span class="jsBtnMinus">-</span>
                             </div>
                             <div class="vl-block__check jsCheckBlock">
                                 <?php foreach ($employment_types as $employment_type): ?>
@@ -185,8 +180,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['d
                                 <input type="text" name="max_salary" value="<?=isset($max_salary)?$max_salary:''?>" />
                             </div>
                         </div>
-                        <button class="vl-btn btn-card btn-red" id = "accept">Применить
-                        </button>
+                        <button class="vl-btn btn-card btn-red" id = "accept">Применить</button>
                     </div>
                 </div>
                 <div class="v-content-bottom__center scroll">
@@ -203,37 +197,41 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['d
                             </div>
                             <div class="single-card__header">
                                 <?php foreach ($vacancy->category as $category): ?>
-                                    <a class="btn-card btn-card-small btn-gray" href="<?=Url::toRoute(['/vacancy/search', 'category_ids' => json_encode([$category->id])])?>"><?= $category->name ?></a>
+                                    <a class="btn-card btn-card-small btn-gray" href="<?=Vacancy::getSearchPageUrl($category->slug)?>"><?= $category->name ?></a>
                                 <?php endforeach ?>
-                                <img
-                                        class="single-card__image" src="<?=$vacancy->company->getPhotoOrEmptyPhoto()?>" alt=""
-                                        role="presentation"/>
+                                <img class="single-card__image" src="<?=$vacancy->company->getPhotoOrEmptyPhoto()?>" alt="" role="presentation"/>
                             </div>
-                            <h3 class="single-card__title mt5"><?= $vacancy->post ?></h3>
+                            <?php if($category_ids && count($category_ids) === 1):?>
+                                <a href="<?=Url::toRoute(['/vacancy/default/view', 'id'=>$vacancy->id, 'referer_category'=>$category_ids[0]])?>" class="single-card__title mt5">
+                                    <?= $vacancy->post ?>
+                                </a>
+                            <?php else: ?>
+                                <a href="<?=Url::toRoute(['/vacancy/default/view', 'id'=>$vacancy->id])?>" class="single-card__title mt5">
+                                    <?= $vacancy->post ?>
+                                </a>
+                            <?php endif ?>
                             <div class="single-card__info-second"><span
                                         class="mr10">Добавлено: <?= Yii::$app->formatter->asDate($vacancy->created_at, 'dd.MM.yyyy') ?></span>
                                 <div class="single-card__view"><img class="single-card__icon mr5"
                                                                     src="/images/icon-eye.png" alt=""
-                                                                    role="presentation"/><span><?= $vacancy->views ?></span>
+                                                                    role="presentation"/><span><?= $vacancy->countViews ?></span>
                                 </div>
-                                <a class="d-flex align-items-center mt5 mb5" href="<?=Url::toRoute(["/vacancy/search/город:$vacancy->city"])?>"><img
-                                            class="single-card__icon"
-                                            src="/images/arr-place.png"
-                                            alt=""
-                                            role="presentation"/><span
-                                            class="ml5"><?= $vacancy->city ?></span></a>
+                                <?php $vacancy_city = \common\models\City::findOne(['name'=>$vacancy->city]);?>
+                                <a class="d-flex align-items-center mt5 mb5" href="<?=Vacancy::getSearchPageUrl(false, $city?$city->slug:false)?>">
+                                    <img class="single-card__icon" src="/images/arr-place.png" alt="" role="presentation"/>
+                                    <span class="ml5"><?= $vacancy->city ?></span>
+                                </a>
                             </div>
                             <span class="single-card__price">
                                 <?php if($vacancy->min_salary && $vacancy->max_salary):?>
-                                    <?= $vacancy->min_salary ?>-<?= $vacancy->max_salary ?> RUB
+                                    <?= MoneyFormat::getFormattedAmount($vacancy->min_salary) ?> - <?= MoneyFormat::getFormattedAmount($vacancy->max_salary) ?> RUB
                                 <?php elseif ($vacancy->min_salary):?>
-                                    От <?= $vacancy->min_salary ?> RUB
+                                    От <?= MoneyFormat::getFormattedAmount($vacancy->min_salary)?> RUB
                                 <?php elseif ($vacancy->max_salary):?>
-                                    До <?= $vacancy->max_salary ?> RUB
+                                    До <?= MoneyFormat::getFormattedAmount($vacancy->max_salary)?> RUB
                                 <?php else: ?>
                                     Зарплата договорная
                                 <?php endif?>
-                    </span>
                             </span>
                             <div class="single-card__info">
                                 <p><?= nl2br(StringHelper::truncate($vacancy->responsibilities, 80, '...')) ?></p>
@@ -253,8 +251,15 @@ $this->registerJsFile(Yii::$app->request->baseUrl . '/js/vacancy_search.js', ['d
                                         <?php endif ?>
                                     <?php endif ?>
                                 </div>
-                                <a class="btn-card btn-red" href="/vacancy/view/<?= $vacancy->id ?>">Посмотреть
-                                    полностью</a>
+                                <?php if($category_ids && count($category_ids) === 1):?>
+                                    <a href="<?=Url::toRoute(['/vacancy/default/view', 'id'=>$vacancy->id, 'referer_category'=>$category_ids[0]])?>" class="btn-card btn-red">
+                                        Посмотреть полностью
+                                    </a>
+                                <?php else: ?>
+                                    <a href="<?=Url::toRoute(['/vacancy/default/view', 'id'=>$vacancy->id])?>" class="btn-card btn-red">
+                                        Посмотреть полностью
+                                    </a>
+                                <?php endif ?>
                             </div>
                         </div>
                     <?php endforeach; ?>

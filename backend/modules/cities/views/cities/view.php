@@ -25,6 +25,13 @@ use yii\widgets\DetailView; ?>
         'model' => $model,
         'attributes' => [
             'name',
+            [
+                'attribute'=>'image',
+                'format'=>'html',
+                'value' => function($model){
+                    return Html::img($model->image, ['height'=>'300px']);
+                }
+            ],
             'region_id',
             [
                 'attribute' => 'status',
@@ -34,6 +41,10 @@ use yii\widgets\DetailView; ?>
             ],
             'latitude',
             'longitude',
+            'slug',
+            'meta_title',
+            'meta_description',
+            'header',
         ],
     ]) ?>
 

@@ -95,6 +95,10 @@ return [
         'main_page' => [
             'class' => 'frontend\modules\main_page\MainPage',
         ],
+        'dialog' => [
+            //'basePath' => '@vendor/apuc/yii2-msg-module/controllers',
+            'class' => 'apuc\msg_module\Module',
+        ],
         'vacancy' => [
             'class' => 'frontend\modules\vacancy\Vacancy',
         ],
@@ -192,21 +196,25 @@ return [
                 'resume/view/<id>' => 'resume/default/view',
                 'vacancy/view/<id>' => 'vacancy/default/view',
                 'msg' => 'msg/default/index',
-                'vacancy/search' => 'vacancy/default/search',
-                'vacancy/search/<search_text>' => 'vacancy/default/search',
-                'vacancy/search/<search_text>/<city>' => 'vacancy/default/search',
-                'resume/search' => 'resume/default/search',
-                'resume/search/<search_text>' => 'resume/default/search',
-                'resume/search/<search_text>/<city>' => 'resume/default/search',
+                'vacancy' => 'vacancy/default/search',
+                'vacancy/<first_query_param>' => 'vacancy/default/search',
+                'vacancy/<first_query_param>/<second_query_param>' => 'vacancy/default/search',
+                'resume' => 'resume/default/search',
+                'resume/<first_query_param>' => 'resume/default/search',
+                'resume/<first_query_param>/<second_query_param>' => 'resume/default/search',
                 'personal-area/<action>' => 'personal_area/default/index',
                 'personal-area/<action>/<id>' => 'personal_area/default/index',
                 'personal-area' => 'personal_area/default/index',
+                'cities' => 'main_page/default/city',
                 'sitemap.xml' => 'sitemap/index',
                 'confirm/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'registration/confirm',
                 ['class' => 'yii\rest\UrlRule', 'controller' =>
                     [
                         'request/category',
                         'request/company',
+                        'request/dialog',
+                        'request/dialog-message',
+                        'request/dialog-user',
                         'request/education',
                         'request/employer',
                         'request/employment-type',
@@ -216,14 +224,18 @@ return [
                         'request/skill',
                         'request/vacancy',
                         'request/views',
+                        'dialog/dialog-message',
+                        'dialog/dialog',
+                        'dialog/dialog-user',
                     ],
                     'pluralize'=>false],
 
             ],
         ],
         'formatter' => [
-
-            'locale' => 'ru-RU'
+            'locale' => 'ru-RU',
+            'thousandSeparator' => ' ',
+            'currencyCode' => 'RUB',
         ],
         'i18n' => [
             'translations' => [
